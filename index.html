@@ -832,7 +832,7 @@ async function submitPurchaseBatch() {
     try {
         const res = await fetch(API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({ action: 'addPurchaseBatch', items: batch })
         });
         const data = await res.json();
@@ -1072,7 +1072,7 @@ async function submitStockBatch() {
     try {
         const res = await fetch(API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({ action: 'updateStockBatch', items: batch })
         });
         const data = await res.json();
