@@ -663,7 +663,7 @@ function renderPurchasePage() {
                     value="${uPrc}"
                     data-field="unitPrice" data-item="${item.name}"
                     oninput="onPurchaseInput(this)" onchange="onPurchaseInput(this)"></td>
-            <td><span class="row-status" id="ps-${item.name.replace(/\s+/g,'_')}">—</span></td>
+            <td><span class="row-status" id="ps-${item.name.replace(/[^a-zA-Z0-9]/g,'_')}">—</span></td>
         `;
         tbody.appendChild(tr);
 
@@ -692,7 +692,7 @@ function onPurchaseInput(input) {
 function updatePurchaseRowStatus(itemName) {
     const entry = purchaseEntries[itemName] || {};
     const existing = purchaseExisting[itemName];
-    const safeId = itemName.replace(/\s+/g,'_');
+    const safeId = itemName.replace(/[^a-zA-Z0-9]/g,'_');
     const el = document.getElementById('ps-' + safeId);
     if (!el) return;
 
@@ -832,6 +832,7 @@ async function submitPurchaseBatch() {
     try {
         const res = await fetch(API_URL, {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'addPurchaseBatch', items: batch })
         });
         const data = await res.json();
@@ -929,7 +930,7 @@ function renderStockPage() {
                     value="${qty}"
                     data-field="quantity" data-item="${item.name}"
                     oninput="onStockInput(this)" onchange="onStockInput(this)"></td>
-            <td><span class="row-status" id="ss-${item.name.replace(/\s+/g,'_')}">—</span></td>
+            <td><span class="row-status" id="ss-${item.name.replace(/[^a-zA-Z0-9]/g,'_')}">—</span></td>
         `;
         tbody.appendChild(tr);
 
@@ -956,7 +957,7 @@ function onStockInput(input) {
 function updateStockRowStatus(itemName) {
     const entry = stockEntries[itemName] || {};
     const existing = stockExisting[itemName];
-    const safeId = itemName.replace(/\s+/g,'_');
+    const safeId = itemName.replace(/[^a-zA-Z0-9]/g,'_');
     const el = document.getElementById('ss-' + safeId);
     if (!el) return;
 
@@ -1071,6 +1072,7 @@ async function submitStockBatch() {
     try {
         const res = await fetch(API_URL, {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'updateStockBatch', items: batch })
         });
         const data = await res.json();
