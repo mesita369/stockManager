@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#b8342f">
+    <title>Hotspot Restaurant - Inventory Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            min-height: 100vh;
+            color: black;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(184, 52, 47, 0.2);
+        }
+
+        .header h1 {
+            color: #b8342f;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: black;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .date-display {
+            background: #b8342f;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(184, 52, 47, 0.3);
+        }
+
+        .main-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .main-button {
+            background: white;
+            border: 4px solid #b8342f;
+            padding: 60px 40px;
+            border-radius: 25px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #b8342f;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .main-button:hover {
+            background: #b8342f;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(184, 52, 47, 0.4);
+        }
+
+        .main-button:active {
+            transform: translateY(-2px);
+        }
+
+        .form-container {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .form-container.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #b8342f;
+        }
+
+        .form-header h2 {
+            color: #b8342f;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: #b8342f;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: #8e2a26;
+            transform: scale(1.05);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: black;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            color: black;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #b8342f;
+            box-shadow: 0 0 0 3px rgba(184, 52, 47, 0.1);
+        }
+
+        .input-with-unit {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-with-unit input {
+            flex: 1;
+        }
+
+        .unit-label {
+            background: #b8342f;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #b8342f;
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: #8e2a26;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(184, 52, 47, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-message {
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 5px solid #28a745;
+            display: block;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 5px solid #dc3545;
+            display: block;
+        }
+
+        .status-message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 5px solid #17a2b8;
+            display: block;
+        }
+
+        /* Loader Styles */
+        .loader-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader-overlay.active {
+            display: flex;
+        }
+
+        .loader-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #b8342f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            color: #b8342f;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            max-width: 500px;
+            animation: slideInRight 0.3s ease-out;
+            pointer-events: auto;
+            border-left: 5px solid;
+        }
+
+        .toast.success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+
+        .toast.error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .toast.info {
+            border-left-color: #17a2b8;
+            background: #d1ecf1;
+        }
+
+        .toast.warning {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .toast.success .toast-title {
+            color: #155724;
+        }
+
+        .toast.error .toast-title {
+            color: #721c24;
+        }
+
+        .toast.info .toast-title {
+            color: #0c5460;
+        }
+
+        .toast.warning .toast-title {
+            color: #856404;
+        }
+
+        .toast-message {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .toast.success .toast-message {
+            color: #155724;
+        }
+
+        .toast.error .toast-message {
+            color: #721c24;
+        }
+
+        .toast.info .toast-message {
+            color: #0c5460;
+        }
+
+        .toast.warning .toast-message {
+            color: #856404;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
+            color: inherit;
+            opacity: 0.6;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .toast.hiding {
+            animation: slideOutRight 0.3s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            /* Header - Mobile optimized */
+            .header {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+                letter-spacing: 1px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            /* Date display */
+            .date-display {
+                font-size: 16px;
+                padding: 12px 20px;
+                margin-bottom: 20px;
+            }
+
+            /* Main buttons - Stack vertically on mobile */
+            .main-buttons {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                margin-bottom: 30px;
+            }
+
+            .main-button {
+                padding: 40px 30px;
+                font-size: 22px;
+            }
+
+            /* Form container */
+            .form-container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+
+            .form-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .form-header h2 {
+                font-size: 24px;
+            }
+
+            .close-btn {
+                width: 100%;
+                padding: 14px;
+            }
+
+            /* Form elements */
+            label {
+                font-size: 15px;
+            }
+
+            select, input, textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 14px;
+            }
+
+            .search-input {
+                font-size: 16px;
+                padding: 14px;
+            }
+
+            /* Dropdown list */
+            .dropdown-list {
+                max-height: 250px;
+            }
+
+            .dropdown-item {
+                padding: 14px;
+                font-size: 15px;
+            }
+
+            /* Input with unit */
+            .input-with-unit {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .input-with-unit input {
+                width: 100%;
+            }
+
+            .unit-label {
+                width: 100%;
+                padding: 12px;
+                text-align: center;
+            }
+
+            /* Submit button */
+            .submit-btn {
+                padding: 16px;
+                font-size: 18px;
+            }
+
+            /* Setup box */
+            .setup-box {
+                padding: 20px;
+                border-width: 2px;
+            }
+
+            .setup-box h3 {
+                font-size: 20px;
+            }
+
+            /* Toast notifications */
+            .toast-container {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+            }
+
+            .toast {
+                min-width: auto;
+                padding: 14px 18px;
+            }
+
+            .toast-icon {
+                font-size: 20px;
+            }
+
+            .toast-title {
+                font-size: 15px;
+            }
+
+            .toast-message {
+                font-size: 13px;
+            }
+
+            /* Loader */
+            .loader-content {
+                padding: 30px;
+            }
+
+            .spinner {
+                width: 50px;
+                height: 50px;
+            }
+
+            .loader-text {
+                font-size: 16px;
+            }
+
+            /* Button group */
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            /* Status messages */
+            .status-message {
+                font-size: 13px;
+                padding: 12px 18px;
+            }
+        }
+
+        /* Extra small devices (phones in portrait) */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .main-button {
+                padding: 35px 25px;
+                font-size: 20px;
+            }
+
+            .form-header h2 {
+                font-size: 22px;
+            }
+
+            .form-container {
+                padding: 15px;
+            }
+
+            .date-display {
+                font-size: 14px;
+            }
+        }
+
+        /* Landscape mode on mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .main-button {
+                padding: 30px 25px;
+                font-size: 20px;
+            }
+
+            .loader-content {
+                padding: 25px;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            /* Increase tap targets for touch devices */
+            select, input, textarea, button {
+                min-height: 44px; /* iOS recommended minimum */
+            }
+
+            .dropdown-item {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+            }
+
+            .main-button {
+                min-height: 80px;
+            }
+
+            /* Better spacing for touch */
+            .form-group {
+                margin-bottom: 25px;
+            }
+        }
+
+        .setup-box {
+            background: white;
+            border: 3px solid #b8342f;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .setup-box h3 {
+            color: #b8342f;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .setup-box input {
+            margin-bottom: 10px;
+        }
+
+        .setup-box button {
+            background: #b8342f;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .setup-box button:hover {
+            background: #8e2a26;
+        }
+
+        @media (max-width: 768px) {
+            .main-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .main-button {
+                padding: 40px 30px;
+                font-size: 22px;
+            }
+        }
+
+        /* Custom Select Dropdown for searchable */
+        .custom-select {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .dropdown-list {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            border: 2px solid #b8342f;
+            border-radius: 10px;
+            margin-top: 5px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .dropdown-list.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: all 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: #b8342f;
+            color: white;
+        }
+
+        .dropdown-item:active {
+            background: #8e2a26;
+            color: white;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Prevent text selection on buttons for better mobile UX */
+        button, .main-button, .dropdown-item {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Better touch feedback */
+        button:active, .main-button:active {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🍽️ HOTSPOT</h1>
+            <p>Restaurant Inventory Management</p>
+        </div>
+
+        <!-- Setup Box -->
+        <div class="setup-box" id="setupBox">
+            <h3>⚙️ Setup Required</h3>
+            <p style="margin-bottom: 15px; color: black;">Enter your Google Apps Script Web App URL to get started:</p>
+            <input type="url" id="apiUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+            <button onclick="saveApiUrl()">Save & Continue</button>
+        </div>
+
+        <!-- Current Date -->
+        <div class="date-display" id="dateDisplay"></div>
+
+        <!-- Main Action Buttons -->
+        <div class="main-buttons" id="mainButtons" style="display: none;">
+            <button class="main-button" onclick="showPurchaseForm()">
+                📦 Add Purchase
+            </button>
+            <button class="main-button" onclick="showStockForm()">
+                📊 Update Stock
+            </button>
+        </div>
+
+        <!-- Purchase Form -->
+        <div class="form-container" id="purchaseForm">
+            <div class="form-header">
+                <h2>📦 Add Purchase</h2>
+                <button class="close-btn" onclick="closeForm('purchaseForm')">✕ Close</button>
+            </div>
+
+            <div class="status-message" id="purchaseStatus"></div>
+
+            <div class="form-group">
+                <label>Category:</label>
+                <select id="purchaseCategory" onchange="loadPurchaseItems()">
+                    <option value="">-- Select Category --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Search Item:</label>
+                <div class="custom-select">
+                    <input type="text" class="search-input" id="purchaseItemSearch" placeholder="Type to search..." 
+                           onfocus="showDropdown('purchaseItemDropdown')" 
+                           oninput="filterPurchaseItems()">
+                    <div class="dropdown-list" id="purchaseItemDropdown"></div>
+                </div>
+            </div>
+
+            <div id="purchaseInputs" style="display: none;">
+                <div class="form-group">
+                    <label>Current Quantity:</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="currentQty" step="0.01" placeholder="0.00">
+                        <div class="unit-label" id="currentQtyUnit">-</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Purchase Quantity:</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="purchaseQty" step="0.01" placeholder="0.00">
+                        <div class="unit-label" id="purchaseQtyUnit">-</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Unit Price:</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="unitPrice" step="0.01" placeholder="0.00">
+                        <div class="unit-label" id="unitPriceLabel">per -</div>
+                    </div>
+                </div>
+
+                <button class="submit-btn" onclick="submitPurchase()">Submit Purchase</button>
+            </div>
+        </div>
+
+        <!-- Stock Update Form -->
+        <div class="form-container" id="stockForm">
+            <div class="form-header">
+                <h2>📊 Update Stock</h2>
+                <button class="close-btn" onclick="closeForm('stockForm')">✕ Close</button>
+            </div>
+
+            <div class="status-message" id="stockStatus"></div>
+
+            <div class="form-group">
+                <label>Category:</label>
+                <select id="stockCategory" onchange="loadStockItems()">
+                    <option value="">-- Select Category --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Search Item:</label>
+                <div class="custom-select">
+                    <input type="text" class="search-input" id="stockItemSearch" placeholder="Type to search..." 
+                           onfocus="showDropdown('stockItemDropdown')" 
+                           oninput="filterStockItems()">
+                    <div class="dropdown-list" id="stockItemDropdown"></div>
+                </div>
+            </div>
+
+            <div id="stockInputs" style="display: none;">
+                <div class="form-group">
+                    <label>Quantity:</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="stockQty" step="0.01" placeholder="0.00">
+                        <div class="unit-label" id="stockQtyUnit">-</div>
+                    </div>
+                </div>
+
+                <button class="submit-btn" onclick="submitStock()">Update Stock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <div class="loader-text" id="loaderText">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        let API_URL = '';
+        let purchaseItems = {};
+        let stockItems = {};
+        let selectedPurchaseItem = null;
+        let selectedStockItem = null;
+        let isUpdatingPurchase = false;
+        let isUpdatingStock = false;
+
+        // Loader functions
+        function showLoader(message = 'Loading...') {
+            document.getElementById('loaderText').textContent = message;
+            document.getElementById('loaderOverlay').classList.add('active');
+        }
+
+        function hideLoader() {
+            document.getElementById('loaderOverlay').classList.remove('active');
+        }
+
+        // Toast notification functions
+        function showToast(title, message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toastContainer');
+            
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            // Icon based on type
+            const icons = {
+                success: '✓',
+                error: '✕',
+                info: 'ℹ',
+                warning: '⚠'
+            };
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || 'ℹ'}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    ${message ? `<div class="toast-message">${message}</div>` : ''}
+                </div>
+                <button class="toast-close" onclick="closeToast(this)">×</button>
+            `;
+            
+            // Add to container
+            container.appendChild(toast);
+            
+            // Auto-remove after duration
+            setTimeout(() => {
+                closeToast(toast.querySelector('.toast-close'));
+            }, duration);
+        }
+
+        function closeToast(button) {
+            const toast = button.parentElement;
+            toast.classList.add('hiding');
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 300); // Match animation duration
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            updateDate();
+            const savedUrl = localStorage.getItem('hotspotApiUrl');
+            if (savedUrl) {
+                document.getElementById('apiUrl').value = savedUrl;
+                API_URL = savedUrl;
+                document.getElementById('setupBox').style.display = 'none';
+                document.getElementById('mainButtons').style.display = 'grid';
+                loadItemsData();
+            }
+        });
+
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('dateDisplay').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        function saveApiUrl() {
+            const url = document.getElementById('apiUrl').value.trim();
+            if (!url) {
+                alert('Please enter the Apps Script URL');
+                return;
+            }
+            localStorage.setItem('hotspotApiUrl', url);
+            API_URL = url;
+            document.getElementById('setupBox').style.display = 'none';
+            document.getElementById('mainButtons').style.display = 'grid';
+            loadItemsData();
+        }
+
+        async function loadItemsData() {
+            showLoader('Loading items...');
+            try {
+                const [purchaseRes, stockRes] = await Promise.all([
+                    fetch(API_URL + '?action=getItems'),
+                    fetch(API_URL + '?action=getStockItems')
+                ]);
+
+                const purchaseData = await purchaseRes.json();
+                const stockData = await stockRes.json();
+
+                if (purchaseData.status === 'success') {
+                    purchaseItems = purchaseData.items;
+                    populateCategories('purchaseCategory', Object.keys(purchaseItems));
+                }
+
+                if (stockData.status === 'success') {
+                    stockItems = stockData.items;
+                    populateCategories('stockCategory', Object.keys(stockItems));
+                }
+            } catch (error) {
+                console.error('Error loading items:', error);
+            } finally {
+                hideLoader();
+            }
+        }
+
+        function populateCategories(selectId, categories) {
+            const select = document.getElementById(selectId);
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                select.appendChild(option);
+            });
+        }
+
+        function showPurchaseForm() {
+            document.getElementById('purchaseForm').classList.add('active');
+            document.getElementById('stockForm').classList.remove('active');
+        }
+
+        function showStockForm() {
+            document.getElementById('stockForm').classList.add('active');
+            document.getElementById('purchaseForm').classList.remove('active');
+        }
+
+        function closeForm(formId) {
+            document.getElementById(formId).classList.remove('active');
+        }
+
+        function showDropdown(dropdownId) {
+            document.getElementById(dropdownId).classList.add('active');
+        }
+
+        function hideDropdown(dropdownId) {
+            setTimeout(() => {
+                document.getElementById(dropdownId).classList.remove('active');
+            }, 200);
+        }
+
+        function loadPurchaseItems() {
+            const category = document.getElementById('purchaseCategory').value;
+            if (!category) return;
+
+            const items = purchaseItems[category] || [];
+            const dropdown = document.getElementById('purchaseItemDropdown');
+            dropdown.innerHTML = '';
+
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'dropdown-item';
+                div.textContent = `${item.name} (${item.unit})`;
+                div.onclick = () => selectPurchaseItem(item, category);
+                dropdown.appendChild(div);
+            });
+
+            document.getElementById('purchaseItemSearch').value = '';
+            document.getElementById('purchaseInputs').style.display = 'none';
+        }
+
+        function filterPurchaseItems() {
+            const searchText = document.getElementById('purchaseItemSearch').value.toLowerCase();
+            const items = document.querySelectorAll('#purchaseItemDropdown .dropdown-item');
+            
+            items.forEach(item => {
+                if (item.textContent.toLowerCase().includes(searchText)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        async function selectPurchaseItem(item, category) {
+            selectedPurchaseItem = { ...item, category };
+            document.getElementById('purchaseItemSearch').value = `${item.name} (${item.unit})`;
+            document.getElementById('purchaseItemDropdown').classList.remove('active');
+            
+            document.getElementById('currentQtyUnit').textContent = item.unit;
+            document.getElementById('purchaseQtyUnit').textContent = item.unit;
+            document.getElementById('unitPriceLabel').textContent = 'per ' + item.unit;
+            
+            // Check if this item already exists today
+            await checkExistingPurchaseEntry(item.name);
+            
+            document.getElementById('purchaseInputs').style.display = 'block';
+        }
+
+        function loadStockItems() {
+            const category = document.getElementById('stockCategory').value;
+            if (!category) return;
+
+            const items = stockItems[category] || [];
+            const dropdown = document.getElementById('stockItemDropdown');
+            dropdown.innerHTML = '';
+
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'dropdown-item';
+                div.textContent = `${item.name} (${item.unit})`;
+                div.onclick = () => selectStockItem(item, category);
+                dropdown.appendChild(div);
+            });
+
+            document.getElementById('stockItemSearch').value = '';
+            document.getElementById('stockInputs').style.display = 'none';
+        }
+
+        function filterStockItems() {
+            const searchText = document.getElementById('stockItemSearch').value.toLowerCase();
+            const items = document.querySelectorAll('#stockItemDropdown .dropdown-item');
+            
+            items.forEach(item => {
+                if (item.textContent.toLowerCase().includes(searchText)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        async function selectStockItem(item, category) {
+            selectedStockItem = { ...item, category };
+            document.getElementById('stockItemSearch').value = `${item.name} (${item.unit})`;
+            document.getElementById('stockItemDropdown').classList.remove('active');
+            
+            document.getElementById('stockQtyUnit').textContent = item.unit;
+            
+            // Check if this item already exists today
+            await checkExistingStockEntry(item.name);
+            
+            document.getElementById('stockInputs').style.display = 'block';
+        }
+
+        async function checkExistingPurchaseEntry(itemName) {
+            showLoader('Checking existing entry...');
+            try {
+                const response = await fetch(API_URL + '?action=checkExistingPurchase&itemName=' + encodeURIComponent(itemName));
+                const result = await response.json();
+                
+                if (result.status === 'success' && result.exists) {
+                    // Item exists - populate the form with existing data
+                    isUpdatingPurchase = true;
+                    
+                    document.getElementById('currentQty').value = result.data.currentQty;
+                    document.getElementById('purchaseQty').value = result.data.purchaseQty;
+                    document.getElementById('unitPrice').value = result.data.unitPrice;
+                    
+                    // Show update notice
+                    showToast(
+                        'Existing Entry Found', 
+                        `${itemName} was already entered today. Values loaded - you can update them.`, 
+                        'info',
+                        5000
+                    );
+                    
+                    // Change button text
+                    const submitBtn = document.querySelector('#purchaseInputs .submit-btn');
+                    submitBtn.textContent = '✏️ Update Purchase';
+                } else {
+                    // New entry
+                    isUpdatingPurchase = false;
+                    
+                    document.getElementById('currentQty').value = '';
+                    document.getElementById('purchaseQty').value = '';
+                    document.getElementById('unitPrice').value = '';
+                    
+                    // Reset button text
+                    const submitBtn = document.querySelector('#purchaseInputs .submit-btn');
+                    submitBtn.textContent = 'Submit Purchase';
+                }
+            } catch (error) {
+                console.error('Error checking existing purchase:', error);
+                isUpdatingPurchase = false;
+            } finally {
+                hideLoader();
+            }
+        }
+
+        async function checkExistingStockEntry(itemName) {
+            showLoader('Checking existing entry...');
+            try {
+                const response = await fetch(API_URL + '?action=checkExistingStock&itemName=' + encodeURIComponent(itemName));
+                const result = await response.json();
+                
+                if (result.status === 'success' && result.exists) {
+                    // Item exists - populate the form with existing data
+                    isUpdatingStock = true;
+                    
+                    document.getElementById('stockQty').value = result.data.quantity;
+                    
+                    // Show update notice
+                    showToast(
+                        'Existing Entry Found', 
+                        `${itemName} was already entered today. Value loaded - you can update it.`, 
+                        'info',
+                        5000
+                    );
+                    
+                    // Change button text
+                    const submitBtn = document.querySelector('#stockInputs .submit-btn');
+                    submitBtn.textContent = '✏️ Update Stock';
+                } else {
+                    // New entry
+                    isUpdatingStock = false;
+                    
+                    document.getElementById('stockQty').value = '';
+                    
+                    // Reset button text
+                    const submitBtn = document.querySelector('#stockInputs .submit-btn');
+                    submitBtn.textContent = 'Update Stock';
+                }
+            } catch (error) {
+                console.error('Error checking existing stock:', error);
+                isUpdatingStock = false;
+            } finally {
+                hideLoader();
+            }
+        }
+
+        async function submitPurchase() {
+            if (!selectedPurchaseItem) {
+                showStatus('purchaseStatus', 'Please select an item', 'error');
+                return;
+            }
+
+            const currentQty = document.getElementById('currentQty').value;
+            const purchaseQty = document.getElementById('purchaseQty').value;
+            const unitPrice = document.getElementById('unitPrice').value;
+
+            if (!currentQty || !purchaseQty || !unitPrice) {
+                showToast('Missing Information', 'Please fill all fields', 'error');
+                return;
+            }
+
+            const submitBtn = event.target;
+            submitBtn.disabled = true;
+            submitBtn.textContent = isUpdatingPurchase ? 'Updating...' : 'Submitting...';
+            showLoader(isUpdatingPurchase ? 'Updating purchase...' : 'Saving purchase...');
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'addPurchase',
+                        category: selectedPurchaseItem.category,
+                        itemName: selectedPurchaseItem.name,
+                        currentQty: currentQty,
+                        purchaseQty: purchaseQty,
+                        unitPrice: unitPrice,
+                        unit: selectedPurchaseItem.unit,
+                        isUpdate: isUpdatingPurchase
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    const title = data.updated ? 'Purchase Updated!' : 'Purchase Added!';
+                    const message = `${selectedPurchaseItem.name}: ${purchaseQty} ${selectedPurchaseItem.unit} @ ₹${unitPrice}`;
+                    showToast(title, message, 'success');
+                    resetPurchaseForm();
+                } else {
+                    showToast('Error', data.message || 'Failed to save purchase', 'error');
+                }
+            } catch (error) {
+                showToast('Connection Error', error.message || 'Failed to connect to server', 'error');
+            } finally {
+                hideLoader();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Purchase';
+                isUpdatingPurchase = false;
+            }
+        }
+
+        async function submitStock() {
+            if (!selectedStockItem) {
+                showToast('No Item Selected', 'Please select an item first', 'error');
+                return;
+            }
+
+            const quantity = document.getElementById('stockQty').value;
+
+            if (!quantity) {
+                showToast('Missing Information', 'Please enter quantity', 'error');
+                return;
+            }
+
+            const submitBtn = event.target;
+            submitBtn.disabled = true;
+            submitBtn.textContent = isUpdatingStock ? 'Updating...' : 'Updating...';
+            showLoader(isUpdatingStock ? 'Updating stock...' : 'Saving stock...');
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'updateStock',
+                        category: selectedStockItem.category,
+                        itemName: selectedStockItem.name,
+                        quantity: quantity,
+                        unit: selectedStockItem.unit,
+                        isUpdate: isUpdatingStock
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    const title = data.updated ? 'Stock Updated!' : 'Stock Recorded!';
+                    const message = `${selectedStockItem.name}: ${quantity} ${selectedStockItem.unit}`;
+                    showToast(title, message, 'success');
+                    resetStockForm();
+                } else {
+                    showToast('Error', data.message || 'Failed to update stock', 'error');
+                }
+            } catch (error) {
+                showToast('Connection Error', error.message || 'Failed to connect to server', 'error');
+            } finally {
+                hideLoader();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Update Stock';
+                isUpdatingStock = false;
+            }
+        }
+
+        function showStatus(elementId, message, type) {
+            const statusEl = document.getElementById(elementId);
+            statusEl.textContent = message;
+            statusEl.className = `status-message ${type}`;
+
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 5000);
+        }
+
+        function resetPurchaseForm() {
+            document.getElementById('purchaseCategory').value = '';
+            document.getElementById('purchaseItemSearch').value = '';
+            document.getElementById('purchaseInputs').style.display = 'none';
+            document.getElementById('currentQty').value = '';
+            document.getElementById('purchaseQty').value = '';
+            document.getElementById('unitPrice').value = '';
+            selectedPurchaseItem = null;
+        }
+
+        function resetStockForm() {
+            document.getElementById('stockCategory').value = '';
+            document.getElementById('stockItemSearch').value = '';
+            document.getElementById('stockInputs').style.display = 'none';
+            document.getElementById('stockQty').value = '';
+            selectedStockItem = null;
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.matches('.search-input')) {
+                document.querySelectorAll('.dropdown-list').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
