@@ -10,11 +10,7 @@
     <title>Hotspot Restaurant - Inventory Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -23,11 +19,7 @@
             color: black;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { max-width: 1300px; margin: 0 auto; padding: 20px; }
 
         .header {
             text-align: center;
@@ -35,1396 +27,1127 @@
             background: white;
             border-radius: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(184, 52, 47, 0.2);
+            box-shadow: 0 10px 30px rgba(184,52,47,0.2);
         }
-
-        .header h1 {
-            color: #b8342f;
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .header p {
-            color: black;
-            font-size: 18px;
-            font-weight: 500;
-        }
+        .header h1 { color: #b8342f; font-size: 48px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+        .header p { color: black; font-size: 18px; font-weight: 500; }
 
         .date-display {
-            background: #b8342f;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(184, 52, 47, 0.3);
+            background: #b8342f; color: white; padding: 15px 30px;
+            border-radius: 15px; text-align: center; font-size: 20px;
+            font-weight: 600; margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(184,52,47,0.3);
         }
 
         .main-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 30px; margin-bottom: 40px;
         }
-
         .main-button {
-            background: white;
-            border: 4px solid #b8342f;
-            padding: 60px 40px;
-            border-radius: 25px;
-            font-size: 28px;
-            font-weight: 700;
-            color: #b8342f;
-            cursor: pointer;
-            transition: all 0.3s;
+            background: white; border: 4px solid #b8342f;
+            padding: 60px 40px; border-radius: 25px;
+            font-size: 28px; font-weight: 700; color: #b8342f;
+            cursor: pointer; transition: all 0.3s;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            text-transform: uppercase; letter-spacing: 1px;
         }
+        .main-button:hover { background: #b8342f; color: white; transform: translateY(-5px); box-shadow: 0 15px 40px rgba(184,52,47,0.4); }
+        .main-button:active { transform: translateY(-2px); }
 
-        .main-button:hover {
-            background: #b8342f;
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(184, 52, 47, 0.4);
-        }
+        .form-container { display: none; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 15px 50px rgba(0,0,0,0.15); margin-bottom: 30px; }
+        .form-container.active { display: block; animation: slideIn 0.3s ease-out; }
 
-        .main-button:active {
-            transform: translateY(-2px);
-        }
-
-        .form-container {
-            display: none;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
-            margin-bottom: 30px;
-        }
-
-        .form-container.active {
-            display: block;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
         .form-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #b8342f;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #b8342f;
         }
-
-        .form-header h2 {
-            color: #b8342f;
-            font-size: 32px;
-            font-weight: 700;
-        }
-
+        .form-header h2 { color: #b8342f; font-size: 32px; font-weight: 700; }
         .close-btn {
-            background: #b8342f;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+            background: #b8342f; color: white; border: none;
+            padding: 12px 25px; border-radius: 10px; font-size: 16px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s;
         }
+        .close-btn:hover { background: #8e2a26; transform: scale(1.05); }
 
-        .close-btn:hover {
-            background: #8e2a26;
-            transform: scale(1.05);
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            color: black;
-            font-weight: 600;
-            font-size: 16px;
-        }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 10px; color: black; font-weight: 600; font-size: 16px; }
 
         select, input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: 'Poppins', sans-serif;
-            color: black;
-            background: white;
-            transition: all 0.3s;
+            width: 100%; padding: 15px; border: 2px solid #ddd;
+            border-radius: 10px; font-size: 16px;
+            font-family: 'Poppins', sans-serif; color: black;
+            background: white; transition: all 0.3s;
+        }
+        select:focus, input:focus { outline: none; border-color: #b8342f; box-shadow: 0 0 0 3px rgba(184,52,47,0.1); }
+
+        /* ── GRID STYLES ── */
+        .grid-wrapper { margin-top: 20px; }
+
+        .grid-info {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; flex-wrap: wrap; gap: 10px;
+        }
+        .grid-info-text { font-size: 14px; color: #555; font-weight: 500; }
+        .grid-info-text span { color: #b8342f; font-weight: 700; }
+
+        .grid-table-wrap { overflow-x: auto; border-radius: 12px; border: 2px solid #e0e0e0; }
+
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+
+        thead tr { background: #b8342f; }
+        thead th {
+            padding: 14px 12px; color: white; font-weight: 600;
+            font-size: 13px; text-align: left; white-space: nowrap;
+        }
+        thead th:first-child { border-radius: 10px 0 0 0; }
+        thead th:last-child { border-radius: 0 10px 0 0; }
+
+        tbody tr { border-bottom: 1px solid #eee; transition: background 0.15s; }
+        tbody tr:hover { background: #fff8f8; }
+        tbody tr:last-child { border-bottom: none; }
+
+        tbody td { padding: 8px 10px; vertical-align: middle; }
+
+        .item-name-cell { font-weight: 600; font-size: 14px; color: #222; }
+        .unit-badge {
+            display: inline-block; background: #fff0f0; color: #b8342f;
+            border: 1px solid #f5c6c6; border-radius: 6px;
+            padding: 2px 8px; font-size: 12px; font-weight: 600; margin-top: 2px;
         }
 
-        select:focus, input:focus {
-            outline: none;
-            border-color: #b8342f;
-            box-shadow: 0 0 0 3px rgba(184, 52, 47, 0.1);
+        .grid-input {
+            width: 100%; padding: 8px 10px; border: 1.5px solid #ddd;
+            border-radius: 8px; font-size: 14px; font-family: 'Poppins', sans-serif;
+            color: black; background: white; transition: border-color 0.2s;
         }
+        .grid-input:focus { outline: none; border-color: #b8342f; background: #fff8f8; }
+        .grid-input.filled { border-color: #28a745; background: #f8fff9; }
+        .grid-input.error-field { border-color: #dc3545 !important; background: #fff5f5 !important; }
 
-        .input-with-unit {
-            display: flex;
-            gap: 10px;
-            align-items: center;
+        .row-status {
+            font-size: 11px; font-weight: 600; text-align: center;
+            padding: 3px 8px; border-radius: 20px; white-space: nowrap;
         }
+        .row-status.empty { color: #aaa; background: #f5f5f5; }
+        .row-status.partial { color: #e67e22; background: #fef9f0; }
+        .row-status.ready { color: #27ae60; background: #eafaf1; }
+        .row-status.existing { color: #2980b9; background: #eaf4fc; }
 
-        .input-with-unit input {
-            flex: 1;
+        /* Pagination */
+        .pagination {
+            display: flex; justify-content: center; align-items: center;
+            gap: 8px; margin-top: 20px; flex-wrap: wrap;
         }
+        .page-btn {
+            padding: 8px 16px; border: 2px solid #b8342f; border-radius: 8px;
+            background: white; color: #b8342f; font-weight: 600; font-size: 14px;
+            cursor: pointer; transition: all 0.2s; font-family: 'Poppins', sans-serif;
+        }
+        .page-btn:hover, .page-btn.active { background: #b8342f; color: white; }
+        .page-btn:disabled { border-color: #ddd; color: #aaa; cursor: not-allowed; background: white; }
+        .page-info { font-size: 14px; color: #555; font-weight: 500; padding: 0 8px; }
 
-        .unit-label {
-            background: #b8342f;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            white-space: nowrap;
-            min-width: 100px;
-            text-align: center;
+        /* Submit area */
+        .submit-area { margin-top: 30px; }
+        .submit-summary {
+            background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 12px;
+            padding: 16px 20px; margin-bottom: 16px;
+            display: flex; gap: 20px; flex-wrap: wrap; align-items: center;
         }
+        .summary-item { font-size: 14px; font-weight: 600; color: #555; }
+        .summary-item span { color: #b8342f; font-size: 18px; }
 
         .submit-btn {
-            width: 100%;
-            background: #b8342f;
-            color: white;
-            border: none;
-            padding: 20px;
-            border-radius: 15px;
-            font-size: 20px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 20px;
+            width: 100%; background: #b8342f; color: white; border: none;
+            padding: 20px; border-radius: 15px; font-size: 20px;
+            font-weight: 700; cursor: pointer; transition: all 0.3s;
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;
+            font-family: 'Poppins', sans-serif;
         }
+        .submit-btn:hover { background: #8e2a26; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(184,52,47,0.4); }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .submit-btn:hover {
-            background: #8e2a26;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(184, 52, 47, 0.4);
+        .clear-btn {
+            width: 100%; background: white; color: #b8342f;
+            border: 2px solid #b8342f; padding: 14px;
+            border-radius: 12px; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; margin-top: 10px;
+            font-family: 'Poppins', sans-serif;
         }
+        .clear-btn:hover { background: #fff0f0; }
 
-        .submit-btn:active {
-            transform: translateY(0);
-        }
+        /* Status messages */
+        .status-message { padding: 15px 25px; border-radius: 10px; margin-bottom: 20px; font-weight: 600; display: none; animation: slideIn 0.3s ease-out; }
+        .status-message.success { background: #d4edda; color: #155724; border-left: 5px solid #28a745; display: block; }
+        .status-message.error { background: #f8d7da; color: #721c24; border-left: 5px solid #dc3545; display: block; }
+        .status-message.info { background: #d1ecf1; color: #0c5460; border-left: 5px solid #17a2b8; display: block; }
 
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .status-message {
-            padding: 15px 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: 600;
-            display: none;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        .status-message.success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 5px solid #28a745;
-            display: block;
-        }
-
-        .status-message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 5px solid #dc3545;
-            display: block;
-        }
-
-        .status-message.info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border-left: 5px solid #17a2b8;
-            display: block;
-        }
-
-        /* Loader Styles */
+        /* Loader */
         .loader-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;
         }
-
-        .loader-overlay.active {
-            display: flex;
-        }
-
-        .loader-content {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid #f3f3f3;
-            border-top: 6px solid #b8342f;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loader-text {
-            color: #b8342f;
-            font-size: 18px;
-            font-weight: 600;
-        }
+        .loader-overlay.active { display: flex; }
+        .loader-content { background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .spinner { width: 60px; height: 60px; border: 6px solid #f3f3f3; border-top: 6px solid #b8342f; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loader-text { color: #b8342f; font-size: 18px; font-weight: 600; }
 
         /* Toast Notification Styles */
         .toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            pointer-events: none;
+            position: fixed; top: 20px; right: 20px; z-index: 10000;
+            display: flex; flex-direction: column; gap: 10px; pointer-events: none;
         }
-
         .toast {
-            background: white;
-            padding: 16px 24px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 300px;
-            max-width: 500px;
-            animation: slideInRight 0.3s ease-out;
-            pointer-events: auto;
+            background: white; padding: 16px 24px; border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            display: flex; align-items: center; gap: 12px;
+            min-width: 300px; max-width: 500px;
+            animation: slideInRight 0.3s ease-out; pointer-events: auto;
             border-left: 5px solid;
         }
-
-        .toast.success {
-            border-left-color: #28a745;
-            background: #d4edda;
-        }
-
-        .toast.error {
-            border-left-color: #dc3545;
-            background: #f8d7da;
-        }
-
-        .toast.info {
-            border-left-color: #17a2b8;
-            background: #d1ecf1;
-        }
-
-        .toast.warning {
-            border-left-color: #ffc107;
-            background: #fff3cd;
-        }
-
-        .toast-icon {
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-
-        .toast-content {
-            flex: 1;
-        }
-
-        .toast-title {
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .toast.success .toast-title {
-            color: #155724;
-        }
-
-        .toast.error .toast-title {
-            color: #721c24;
-        }
-
-        .toast.info .toast-title {
-            color: #0c5460;
-        }
-
-        .toast.warning .toast-title {
-            color: #856404;
-        }
-
-        .toast-message {
-            font-size: 14px;
-            line-height: 1.4;
-        }
-
-        .toast.success .toast-message {
-            color: #155724;
-        }
-
-        .toast.error .toast-message {
-            color: #721c24;
-        }
-
-        .toast.info .toast-message {
-            color: #0c5460;
-        }
-
-        .toast.warning .toast-message {
-            color: #856404;
-        }
-
+        .toast.success { border-left-color: #28a745; background: #d4edda; }
+        .toast.error { border-left-color: #dc3545; background: #f8d7da; }
+        .toast.info { border-left-color: #17a2b8; background: #d1ecf1; }
+        .toast.warning { border-left-color: #ffc107; background: #fff3cd; }
+        .toast-icon { font-size: 24px; flex-shrink: 0; }
+        .toast-content { flex: 1; }
+        .toast-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+        .toast.success .toast-title { color: #155724; }
+        .toast.error .toast-title { color: #721c24; }
+        .toast.info .toast-title { color: #0c5460; }
+        .toast.warning .toast-title { color: #856404; }
+        .toast-message { font-size: 14px; line-height: 1.4; }
+        .toast.success .toast-message { color: #155724; }
+        .toast.error .toast-message { color: #721c24; }
+        .toast.info .toast-message { color: #0c5460; }
+        .toast.warning .toast-message { color: #856404; }
         .toast-close {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background 0.2s;
-            color: inherit;
-            opacity: 0.6;
+            background: none; border: none; font-size: 20px; cursor: pointer;
+            padding: 0; width: 24px; height: 24px; display: flex;
+            align-items: center; justify-content: center;
+            border-radius: 50%; transition: background 0.2s;
+            color: inherit; opacity: 0.6;
         }
+        .toast-close:hover { opacity: 1; background: rgba(0,0,0,0.1); }
+        @keyframes slideInRight { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
+        .toast.hiding { animation: slideOutRight 0.3s ease-out forwards; }
 
-        .toast-close:hover {
-            opacity: 1;
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideOutRight {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-        }
-
-        .toast.hiding {
-            animation: slideOutRight 0.3s ease-out forwards;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                padding: 10px;
-            }
-
-            /* Header - Mobile optimized */
-            .header {
-                padding: 20px 15px;
-                margin-bottom: 20px;
-            }
-
-            .header h1 {
-                font-size: 32px;
-                letter-spacing: 1px;
-            }
-
-            .header p {
-                font-size: 14px;
-            }
-
-            /* Date display */
-            .date-display {
-                font-size: 16px;
-                padding: 12px 20px;
-                margin-bottom: 20px;
-            }
-
-            /* Main buttons - Stack vertically on mobile */
-            .main-buttons {
-                grid-template-columns: 1fr;
-                gap: 15px;
-                margin-bottom: 30px;
-            }
-
-            .main-button {
-                padding: 40px 30px;
-                font-size: 22px;
-            }
-
-            /* Form container */
-            .form-container {
-                padding: 20px;
-                border-radius: 15px;
-            }
-
-            .form-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            .form-header h2 {
-                font-size: 24px;
-            }
-
-            .close-btn {
-                width: 100%;
-                padding: 14px;
-            }
-
-            /* Form elements */
-            label {
-                font-size: 15px;
-            }
-
-            select, input, textarea {
-                font-size: 16px; /* Prevents zoom on iOS */
-                padding: 14px;
-            }
-
-            .search-input {
-                font-size: 16px;
-                padding: 14px;
-            }
-
-            /* Dropdown list */
-            .dropdown-list {
-                max-height: 250px;
-            }
-
-            .dropdown-item {
-                padding: 14px;
-                font-size: 15px;
-            }
-
-            /* Input with unit */
-            .input-with-unit {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .input-with-unit input {
-                width: 100%;
-            }
-
-            .unit-label {
-                width: 100%;
-                padding: 12px;
-                text-align: center;
-            }
-
-            /* Submit button */
-            .submit-btn {
-                padding: 16px;
-                font-size: 18px;
-            }
-
-            /* Setup box */
-            .setup-box {
-                padding: 20px;
-                border-width: 2px;
-            }
-
-            .setup-box h3 {
-                font-size: 20px;
-            }
-
-            /* Toast notifications */
-            .toast-container {
-                top: 10px;
-                left: 10px;
-                right: 10px;
-            }
-
-            .toast {
-                min-width: auto;
-                padding: 14px 18px;
-            }
-
-            .toast-icon {
-                font-size: 20px;
-            }
-
-            .toast-title {
-                font-size: 15px;
-            }
-
-            .toast-message {
-                font-size: 13px;
-            }
-
-            /* Loader */
-            .loader-content {
-                padding: 30px;
-            }
-
-            .spinner {
-                width: 50px;
-                height: 50px;
-            }
-
-            .loader-text {
-                font-size: 16px;
-            }
-
-            /* Button group */
-            .button-group {
-                grid-template-columns: 1fr;
-            }
-
-            /* Status messages */
-            .status-message {
-                font-size: 13px;
-                padding: 12px 18px;
-            }
-        }
-
-        /* Extra small devices (phones in portrait) */
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 28px;
-            }
-
-            .main-button {
-                padding: 35px 25px;
-                font-size: 20px;
-            }
-
-            .form-header h2 {
-                font-size: 22px;
-            }
-
-            .form-container {
-                padding: 15px;
-            }
-
-            .date-display {
-                font-size: 14px;
-            }
-        }
-
-        /* Landscape mode on mobile */
-        @media (max-width: 768px) and (orientation: landscape) {
-            .header h1 {
-                font-size: 28px;
-            }
-
-            .main-button {
-                padding: 30px 25px;
-                font-size: 20px;
-            }
-
-            .loader-content {
-                padding: 25px;
-            }
-        }
+        .setup-box { background: white; border: 3px solid #b8342f; border-radius: 20px; padding: 30px; margin-bottom: 30px; }
+        .setup-box h3 { color: #b8342f; font-size: 24px; margin-bottom: 15px; }
+        .setup-box input { margin-bottom: 10px; }
+        .setup-box button { background: #b8342f; color: white; border: none; padding: 12px 30px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif; }
+        .setup-box button:hover { background: #8e2a26; }
 
         /* Touch-friendly improvements */
-        @media (hover: none) and (pointer: coarse) {
-            /* Increase tap targets for touch devices */
-            select, input, textarea, button {
-                min-height: 44px; /* iOS recommended minimum */
-            }
-
-            .dropdown-item {
-                min-height: 44px;
-                display: flex;
-                align-items: center;
-            }
-
-            .main-button {
-                min-height: 80px;
-            }
-
-            /* Better spacing for touch */
-            .form-group {
-                margin-bottom: 25px;
-            }
-        }
-
-        .setup-box {
-            background: white;
-            border: 3px solid #b8342f;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .setup-box h3 {
-            color: #b8342f;
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .setup-box input {
-            margin-bottom: 10px;
-        }
-
-        .setup-box button {
-            background: #b8342f;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .setup-box button:hover {
-            background: #8e2a26;
-        }
-
-        @media (max-width: 768px) {
-            .main-buttons {
-                grid-template-columns: 1fr;
-            }
-
-            .header h1 {
-                font-size: 32px;
-            }
-
-            .main-button {
-                padding: 40px 30px;
-                font-size: 22px;
-            }
-        }
-
-        /* Custom Select Dropdown for searchable */
-        .custom-select {
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .dropdown-list {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            max-height: 300px;
-            overflow-y: auto;
-            background: white;
-            border: 2px solid #b8342f;
-            border-radius: 10px;
-            margin-top: 5px;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .dropdown-list.active {
-            display: block;
-        }
-
-        .dropdown-item {
-            padding: 15px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-            transition: all 0.2s;
-        }
-
-        .dropdown-item:hover {
-            background: #b8342f;
-            color: white;
-        }
-
-        .dropdown-item:active {
-            background: #8e2a26;
-            color: white;
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        /* Prevent text selection on buttons for better mobile UX */
-        button, .main-button, .dropdown-item {
+        button, .main-button, select, input {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
         }
+        button:active, .main-button:active { opacity: 0.9; }
 
-        /* Better touch feedback */
-        button:active, .main-button:active {
-            opacity: 0.9;
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 10px; }
+            .header { padding: 20px 15px; margin-bottom: 20px; }
+            .header h1 { font-size: 32px; letter-spacing: 1px; }
+            .header p { font-size: 14px; }
+            .date-display { font-size: 16px; padding: 12px 20px; margin-bottom: 20px; }
+            .main-buttons { grid-template-columns: 1fr; gap: 15px; margin-bottom: 30px; }
+            .main-button { padding: 40px 30px; font-size: 22px; }
+            .form-container { padding: 20px; border-radius: 15px; }
+            .form-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .form-header h2 { font-size: 24px; }
+            .close-btn { width: 100%; padding: 14px; }
+            label { font-size: 15px; }
+            select, input, textarea { font-size: 16px; padding: 14px; }
+            .grid-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .grid-input { font-size: 16px; padding: 10px; }
+            .submit-btn, .clear-btn { padding: 16px; font-size: 16px; }
+            .submit-area { flex-direction: column; gap: 15px; }
+            .submit-summary { flex-direction: column; gap: 8px; }
+            .setup-box { padding: 20px; border-width: 2px; }
+            .setup-box h3 { font-size: 20px; }
+            .toast-container { top: 10px; left: 10px; right: 10px; }
+            .toast { min-width: auto; padding: 14px 18px; }
+            .toast-icon { font-size: 20px; }
+            .toast-title { font-size: 15px; }
+            .toast-message { font-size: 13px; }
+            .loader-content { padding: 30px; }
+            .spinner { width: 50px; height: 50px; }
+            .loader-text { font-size: 16px; }
+            .pagination { flex-wrap: wrap; gap: 8px; }
+            .page-btn { padding: 8px 12px; font-size: 14px; }
+            .cat-label { font-size: 14px; padding: 6px 12px; }
+            .grid-info-text { font-size: 13px; }
         }
+
+        @media (max-width: 480px) {
+            .header h1 { font-size: 28px; }
+            .main-button { padding: 35px 25px; font-size: 20px; }
+            .form-header h2 { font-size: 22px; }
+            .form-container { padding: 15px; }
+            .date-display { font-size: 14px; }
+        }
+
+        @media (max-width: 768px) and (orientation: landscape) {
+            .header h1 { font-size: 28px; }
+            .main-button { padding: 30px 25px; font-size: 20px; }
+            .loader-content { padding: 25px; }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            select, input, textarea, button { min-height: 44px; }
+            .main-button { min-height: 80px; }
+            .form-group { margin-bottom: 25px; }
+            .page-btn { min-height: 44px; min-width: 44px; }
+        }
+
+        /* Category label chip */
+        .cat-label {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #fff0f0; border: 1.5px solid #f5c6c6;
+            border-radius: 8px; padding: 8px 14px;
+            font-size: 14px; font-weight: 600; color: #b8342f;
+            margin-bottom: 16px;
+        }
+
+        .no-items-msg { text-align: center; padding: 40px; color: #aaa; font-size: 16px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>🍽️ HOTSPOT</h1>
-            <p>Restaurant Inventory Management</p>
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <h1>🍽️ HOTSPOT</h1>
+        <p>Restaurant Inventory Management</p>
+    </div>
+
+    <!-- Setup -->
+    <div class="setup-box" id="setupBox">
+        <h3>⚙️ Setup Required</h3>
+        <p style="margin-bottom:15px;color:black;">Enter your Google Apps Script Web App URL to get started:</p>
+        <input type="url" id="apiUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+        <button onclick="saveApiUrl()">Save & Continue</button>
+    </div>
+
+    <!-- Date -->
+    <div class="date-display" id="dateDisplay"></div>
+
+    <!-- Main Buttons -->
+    <div class="main-buttons" id="mainButtons" style="display:none;">
+        <button class="main-button" onclick="showPurchaseForm()">📦 Add Purchase</button>
+        <button class="main-button" onclick="showStockForm()">📊 Update Stock</button>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PURCHASE FORM
+    ══════════════════════════════════════ -->
+    <div class="form-container" id="purchaseForm">
+        <div class="form-header">
+            <h2>📦 Add Purchase</h2>
+            <button class="close-btn" onclick="closeForm('purchaseForm')">✕ Close</button>
         </div>
 
-        <!-- Setup Box -->
-        <div class="setup-box" id="setupBox">
-            <h3>⚙️ Setup Required</h3>
-            <p style="margin-bottom: 15px; color: black;">Enter your Google Apps Script Web App URL to get started:</p>
-            <input type="url" id="apiUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
-            <button onclick="saveApiUrl()">Save & Continue</button>
+        <div class="status-message" id="purchaseStatus"></div>
+
+        <div class="form-group">
+            <label>Category:</label>
+            <select id="purchaseCategory" onchange="loadPurchaseGrid()">
+                <option value="">-- Select Category --</option>
+            </select>
         </div>
 
-        <!-- Current Date -->
-        <div class="date-display" id="dateDisplay"></div>
-
-        <!-- Main Action Buttons -->
-        <div class="main-buttons" id="mainButtons" style="display: none;">
-            <button class="main-button" onclick="showPurchaseForm()">
-                📦 Add Purchase
-            </button>
-            <button class="main-button" onclick="showStockForm()">
-                📊 Update Stock
-            </button>
-        </div>
-
-        <!-- Purchase Form -->
-        <div class="form-container" id="purchaseForm">
-            <div class="form-header">
-                <h2>📦 Add Purchase</h2>
-                <button class="close-btn" onclick="closeForm('purchaseForm')">✕ Close</button>
-            </div>
-
-            <div class="status-message" id="purchaseStatus"></div>
-
-            <div class="form-group">
-                <label>Category:</label>
-                <select id="purchaseCategory" onchange="loadPurchaseItems()">
-                    <option value="">-- Select Category --</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Search Item:</label>
-                <div class="custom-select">
-                    <input type="text" class="search-input" id="purchaseItemSearch" placeholder="Type to search..." 
-                           onfocus="showDropdown('purchaseItemDropdown')" 
-                           oninput="filterPurchaseItems()">
-                    <div class="dropdown-list" id="purchaseItemDropdown"></div>
+        <!-- Grid area -->
+        <div class="grid-wrapper" id="purchaseGridWrapper" style="display:none;">
+            <div class="cat-label" id="purchaseCatLabel">📂 Category</div>
+            <div class="grid-info">
+                <div class="grid-info-text">
+                    Showing <span id="purchasePageRange">-</span> of <span id="purchaseTotalItems">-</span> items &nbsp;|&nbsp;
+                    <span id="purchaseFilledCount">0</span> rows filled
                 </div>
+                <div style="font-size:13px;color:#888;">Fill in the rows you want to submit — leave others blank</div>
             </div>
 
-            <div id="purchaseInputs" style="display: none;">
-                <div class="form-group">
-                    <label>Current Quantity:</label>
-                    <div class="input-with-unit">
-                        <input type="number" id="currentQty" step="0.01" placeholder="0.00">
-                        <div class="unit-label" id="currentQtyUnit">-</div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Purchase Quantity:</label>
-                    <div class="input-with-unit">
-                        <input type="number" id="purchaseQty" step="0.01" placeholder="0.00">
-                        <div class="unit-label" id="purchaseQtyUnit">-</div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Unit Price:</label>
-                    <div class="input-with-unit">
-                        <input type="number" id="unitPrice" step="0.01" placeholder="0.00">
-                        <div class="unit-label" id="unitPriceLabel">per -</div>
-                    </div>
-                </div>
-
-                <button class="submit-btn" onclick="submitPurchase()">Submit Purchase</button>
-            </div>
-        </div>
-
-        <!-- Stock Update Form -->
-        <div class="form-container" id="stockForm">
-            <div class="form-header">
-                <h2>📊 Update Stock</h2>
-                <button class="close-btn" onclick="closeForm('stockForm')">✕ Close</button>
+            <div class="grid-table-wrap">
+                <table id="purchaseGrid">
+                    <thead>
+                        <tr>
+                            <th style="width:30px;">#</th>
+                            <th>Item Name</th>
+                            <th style="width:130px;">Current Qty</th>
+                            <th style="width:130px;">Purchase Qty</th>
+                            <th style="width:130px;">Unit Price (₹)</th>
+                            <th style="width:90px;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="purchaseGridBody"></tbody>
+                </table>
             </div>
 
-            <div class="status-message" id="stockStatus"></div>
+            <div class="pagination" id="purchasePagination"></div>
 
-            <div class="form-group">
-                <label>Category:</label>
-                <select id="stockCategory" onchange="loadStockItems()">
-                    <option value="">-- Select Category --</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Search Item:</label>
-                <div class="custom-select">
-                    <input type="text" class="search-input" id="stockItemSearch" placeholder="Type to search..." 
-                           onfocus="showDropdown('stockItemDropdown')" 
-                           oninput="filterStockItems()">
-                    <div class="dropdown-list" id="stockItemDropdown"></div>
+            <div class="submit-area">
+                <div class="submit-summary">
+                    <div class="summary-item">Total items to submit: <span id="purchaseSubmitCount">0</span></div>
+                    <div class="summary-item">New entries: <span id="purchaseNewCount">0</span></div>
+                    <div class="summary-item">Updates: <span id="purchaseUpdateCount">0</span></div>
                 </div>
-            </div>
-
-            <div id="stockInputs" style="display: none;">
-                <div class="form-group">
-                    <label>Quantity:</label>
-                    <div class="input-with-unit">
-                        <input type="number" id="stockQty" step="0.01" placeholder="0.00">
-                        <div class="unit-label" id="stockQtyUnit">-</div>
-                    </div>
-                </div>
-
-                <button class="submit-btn" onclick="submitStock()">Update Stock</button>
+                <button class="submit-btn" id="purchaseSubmitBtn" onclick="submitPurchaseBatch()">
+                    ✅ Submit All Purchases
+                </button>
+                <button class="clear-btn" onclick="clearPurchaseGrid()">🗑️ Clear All Entries</button>
             </div>
         </div>
     </div>
 
-    <!-- Loading Overlay -->
-    <div class="loader-overlay" id="loaderOverlay">
-        <div class="loader-content">
-            <div class="spinner"></div>
-            <div class="loader-text" id="loaderText">Loading...</div>
+    <!-- ══════════════════════════════════════
+         STOCK FORM
+    ══════════════════════════════════════ -->
+    <div class="form-container" id="stockForm">
+        <div class="form-header">
+            <h2>📊 Update Stock</h2>
+            <button class="close-btn" onclick="closeForm('stockForm')">✕ Close</button>
+        </div>
+
+        <div class="status-message" id="stockStatus"></div>
+
+        <div class="form-group">
+            <label>Category:</label>
+            <select id="stockCategory" onchange="loadStockGrid()">
+                <option value="">-- Select Category --</option>
+            </select>
+        </div>
+
+        <!-- Grid area -->
+        <div class="grid-wrapper" id="stockGridWrapper" style="display:none;">
+            <div class="cat-label" id="stockCatLabel">📂 Category</div>
+            <div class="grid-info">
+                <div class="grid-info-text">
+                    Showing <span id="stockPageRange">-</span> of <span id="stockTotalItems">-</span> items &nbsp;|&nbsp;
+                    <span id="stockFilledCount">0</span> rows filled
+                </div>
+                <div style="font-size:13px;color:#888;">Fill in the rows you want to submit — leave others blank</div>
+            </div>
+
+            <div class="grid-table-wrap">
+                <table id="stockGrid">
+                    <thead>
+                        <tr>
+                            <th style="width:30px;">#</th>
+                            <th>Item Name</th>
+                            <th style="width:160px;">Quantity</th>
+                            <th style="width:90px;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stockGridBody"></tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="stockPagination"></div>
+
+            <div class="submit-area">
+                <div class="submit-summary">
+                    <div class="summary-item">Total items to submit: <span id="stockSubmitCount">0</span></div>
+                    <div class="summary-item">New entries: <span id="stockNewCount">0</span></div>
+                    <div class="summary-item">Updates: <span id="stockUpdateCount">0</span></div>
+                </div>
+                <button class="submit-btn" id="stockSubmitBtn" onclick="submitStockBatch()">
+                    ✅ Submit All Stock Updates
+                </button>
+                <button class="clear-btn" onclick="clearStockGrid()">🗑️ Clear All Entries</button>
+            </div>
         </div>
     </div>
+</div>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
+<!-- Loader -->
+<div class="loader-overlay" id="loaderOverlay">
+    <div class="loader-content">
+        <div class="spinner"></div>
+        <div class="loader-text" id="loaderText">Loading...</div>
+    </div>
+</div>
 
-    <script>
-        let API_URL = '';
-        let purchaseItems = {};
-        let stockItems = {};
-        let selectedPurchaseItem = null;
-        let selectedStockItem = null;
-        let isUpdatingPurchase = false;
-        let isUpdatingStock = false;
+<script>
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let API_URL = '';
+let purchaseItems = {};
+let stockItems = {};
 
-        // Loader functions
-        function showLoader(message = 'Loading...') {
-            document.getElementById('loaderText').textContent = message;
-            document.getElementById('loaderOverlay').classList.add('active');
+const ITEMS_PER_PAGE = 10;
+
+// Purchase grid state
+let purchaseData = [];      // all items in selected category
+let purchasePage = 1;
+let purchaseExisting = {};  // { itemName: {currentQty, purchaseQty, unitPrice} }
+let purchaseEntries = {};   // { itemName: {currentQty, purchaseQty, unitPrice} } — user input
+
+// Stock grid state
+let stockData = [];
+let stockPage = 1;
+let stockExisting = {};     // { itemName: quantity }
+let stockEntries = {};      // { itemName: quantity }
+
+// ─────────────────────────────────────────
+// LOADER
+// ─────────────────────────────────────────
+function showLoader(msg = 'Loading...') {
+    document.getElementById('loaderText').textContent = msg;
+    document.getElementById('loaderOverlay').classList.add('active');
+}
+function hideLoader() {
+    document.getElementById('loaderOverlay').classList.remove('active');
+}
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+    updateDate();
+    const savedUrl = localStorage.getItem('hotspotApiUrl');
+    if (savedUrl) {
+        document.getElementById('apiUrl').value = savedUrl;
+        API_URL = savedUrl;
+        document.getElementById('setupBox').style.display = 'none';
+        document.getElementById('mainButtons').style.display = 'grid';
+        loadItemsData();
+    }
+});
+
+function updateDate() {
+    const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', opts);
+}
+
+function saveApiUrl() {
+    const url = document.getElementById('apiUrl').value.trim();
+    if (!url) { alert('Please enter the Apps Script URL'); return; }
+    localStorage.setItem('hotspotApiUrl', url);
+    API_URL = url;
+    document.getElementById('setupBox').style.display = 'none';
+    document.getElementById('mainButtons').style.display = 'grid';
+    loadItemsData();
+}
+
+async function loadItemsData() {
+    showLoader('Loading items...');
+    try {
+        const [pRes, sRes] = await Promise.all([
+            fetch(API_URL + '?action=getItems'),
+            fetch(API_URL + '?action=getStockItems')
+        ]);
+        const pData = await pRes.json();
+        const sData = await sRes.json();
+
+        if (pData.status === 'success') {
+            purchaseItems = pData.items;
+            populateCategories('purchaseCategory', Object.keys(purchaseItems));
         }
-
-        function hideLoader() {
-            document.getElementById('loaderOverlay').classList.remove('active');
+        if (sData.status === 'success') {
+            stockItems = sData.items;
+            populateCategories('stockCategory', Object.keys(stockItems));
         }
+    } catch (e) {
+        console.error('Error loading items:', e);
+    } finally {
+        hideLoader();
+    }
+}
 
-        // Toast notification functions
-        function showToast(title, message, type = 'info', duration = 4000) {
-            const container = document.getElementById('toastContainer');
-            
-            // Create toast element
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            
-            // Icon based on type
-            const icons = {
-                success: '✓',
-                error: '✕',
-                info: 'ℹ',
-                warning: '⚠'
-            };
-            
-            toast.innerHTML = `
-                <div class="toast-icon">${icons[type] || 'ℹ'}</div>
-                <div class="toast-content">
-                    <div class="toast-title">${title}</div>
-                    ${message ? `<div class="toast-message">${message}</div>` : ''}
-                </div>
-                <button class="toast-close" onclick="closeToast(this)">×</button>
-            `;
-            
-            // Add to container
-            container.appendChild(toast);
-            
-            // Auto-remove after duration
-            setTimeout(() => {
-                closeToast(toast.querySelector('.toast-close'));
-            }, duration);
+function populateCategories(selectId, categories) {
+    const sel = document.getElementById(selectId);
+    categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        sel.appendChild(opt);
+    });
+}
+
+// ─────────────────────────────────────────
+// FORM SHOW / HIDE
+// ─────────────────────────────────────────
+function showPurchaseForm() {
+    document.getElementById('purchaseForm').classList.add('active');
+    document.getElementById('stockForm').classList.remove('active');
+}
+function showStockForm() {
+    document.getElementById('stockForm').classList.add('active');
+    document.getElementById('purchaseForm').classList.remove('active');
+}
+function closeForm(id) {
+    document.getElementById(id).classList.remove('active');
+}
+
+// ─────────────────────────────────────────
+// PURCHASE GRID
+// ─────────────────────────────────────────
+async function loadPurchaseGrid() {
+    const cat = document.getElementById('purchaseCategory').value;
+    if (!cat) { document.getElementById('purchaseGridWrapper').style.display = 'none'; return; }
+
+    purchaseData = purchaseItems[cat] || [];
+    purchasePage = 1;
+    purchaseEntries = {};
+    purchaseExisting = {};
+
+    document.getElementById('purchaseCatLabel').textContent = '📂 ' + cat;
+    document.getElementById('purchaseTotalItems').textContent = purchaseData.length;
+    document.getElementById('purchaseGridWrapper').style.display = 'block';
+
+    // Fetch existing today's entries for this category
+    showLoader('Checking today\'s entries...');
+    try {
+        const res = await fetch(API_URL + '?action=getCategoryPurchase&category=' + encodeURIComponent(cat));
+        const result = await res.json();
+        if (result.status === 'success' && result.items) {
+            purchaseExisting = result.items; // { itemName: {currentQty, purchaseQty, unitPrice} }
         }
+    } catch (e) { console.warn('Could not load existing entries', e); }
+    finally { hideLoader(); }
 
-        function closeToast(button) {
-            const toast = button.parentElement;
-            toast.classList.add('hiding');
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 300); // Match animation duration
+    renderPurchasePage();
+}
+
+function renderPurchasePage() {
+    const tbody = document.getElementById('purchaseGridBody');
+    tbody.innerHTML = '';
+
+    const total = purchaseData.length;
+    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    const start = (purchasePage - 1) * ITEMS_PER_PAGE;
+    const end = Math.min(start + ITEMS_PER_PAGE, total);
+    const pageItems = purchaseData.slice(start, end);
+
+    document.getElementById('purchasePageRange').textContent = `${start + 1}–${end}`;
+
+    pageItems.forEach((item, idx) => {
+        const globalIdx = start + idx;
+        const existing = purchaseExisting[item.name];
+        const entry = purchaseEntries[item.name] || {};
+
+        const tr = document.createElement('tr');
+        tr.dataset.itemName = item.name;
+        tr.dataset.unit = item.unit;
+
+        // Pre-fill from existing today or from user input
+        const cQty  = entry.currentQty  !== undefined ? entry.currentQty  : (existing ? existing.currentQty  : '');
+        const pQty  = entry.purchaseQty !== undefined ? entry.purchaseQty : (existing ? existing.purchaseQty : '');
+        const uPrc  = entry.unitPrice   !== undefined ? entry.unitPrice   : (existing ? existing.unitPrice   : '');
+
+        tr.innerHTML = `
+            <td style="color:#aaa;font-size:13px;text-align:center;">${globalIdx + 1}</td>
+            <td>
+                <div class="item-name-cell">${item.name}</div>
+                <div><span class="unit-badge">${item.unit}</span></div>
+            </td>
+            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00"
+                    value="${cQty}"
+                    data-field="currentQty" data-item="${item.name}"
+                    oninput="onPurchaseInput(this)" onchange="onPurchaseInput(this)"></td>
+            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00"
+                    value="${pQty}"
+                    data-field="purchaseQty" data-item="${item.name}"
+                    oninput="onPurchaseInput(this)" onchange="onPurchaseInput(this)"></td>
+            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00"
+                    value="${uPrc}"
+                    data-field="unitPrice" data-item="${item.name}"
+                    oninput="onPurchaseInput(this)" onchange="onPurchaseInput(this)"></td>
+            <td><span class="row-status" id="ps-${item.name.replace(/\s+/g,'_')}">—</span></td>
+        `;
+        tbody.appendChild(tr);
+
+        // Set initial styling
+        updatePurchaseRowStatus(item.name);
+        styleInputs(tr);
+    });
+
+    renderPurchasePagination(totalPages);
+    updatePurchaseSummary();
+}
+
+function onPurchaseInput(input) {
+    const itemName = input.dataset.item;
+    const field = input.dataset.field;
+    const val = input.value;
+
+    if (!purchaseEntries[itemName]) purchaseEntries[itemName] = {};
+    purchaseEntries[itemName][field] = val;
+
+    styleInputs(input.closest('tr'));
+    updatePurchaseRowStatus(itemName);
+    updatePurchaseSummary();
+}
+
+function updatePurchaseRowStatus(itemName) {
+    const entry = purchaseEntries[itemName] || {};
+    const existing = purchaseExisting[itemName];
+    const safeId = itemName.replace(/\s+/g,'_');
+    const el = document.getElementById('ps-' + safeId);
+    if (!el) return;
+
+    const hasCurrentQty  = entry.currentQty  !== '' && entry.currentQty  !== undefined;
+    const hasPurchaseQty = entry.purchaseQty !== '' && entry.purchaseQty !== undefined;
+    const hasUnitPrice   = entry.unitPrice   !== '' && entry.unitPrice   !== undefined;
+
+    const filledCount = [hasCurrentQty, hasPurchaseQty, hasUnitPrice].filter(Boolean).length;
+
+    if (filledCount === 0) {
+        if (existing) {
+            el.textContent = '📝 Existing'; el.className = 'row-status existing';
+        } else {
+            el.textContent = '—'; el.className = 'row-status empty';
         }
+    } else if (filledCount < 3) {
+        el.textContent = '⚠ Partial'; el.className = 'row-status partial';
+    } else {
+        el.textContent = existing ? '✏ Update' : '✅ Ready'; el.className = 'row-status ready';
+    }
+}
 
-        // Initialize
-        window.addEventListener('DOMContentLoaded', () => {
-            updateDate();
-            const savedUrl = localStorage.getItem('hotspotApiUrl');
-            if (savedUrl) {
-                document.getElementById('apiUrl').value = savedUrl;
-                API_URL = savedUrl;
-                document.getElementById('setupBox').style.display = 'none';
-                document.getElementById('mainButtons').style.display = 'grid';
-                loadItemsData();
-            }
+function updatePurchaseSummary() {
+    let filled = 0, newEntries = 0, updates = 0;
+    Object.keys(purchaseEntries).forEach(name => {
+        const e = purchaseEntries[name];
+        if (e.currentQty !== '' && e.currentQty !== undefined &&
+            e.purchaseQty !== '' && e.purchaseQty !== undefined &&
+            e.unitPrice !== '' && e.unitPrice !== undefined) {
+            filled++;
+            if (purchaseExisting[name]) updates++;
+            else newEntries++;
+        }
+    });
+    document.getElementById('purchaseFilledCount').textContent = filled;
+    document.getElementById('purchaseSubmitCount').textContent = filled;
+    document.getElementById('purchaseNewCount').textContent = newEntries;
+    document.getElementById('purchaseUpdateCount').textContent = updates;
+}
+
+function renderPurchasePagination(totalPages) {
+    const pg = document.getElementById('purchasePagination');
+    pg.innerHTML = '';
+    if (totalPages <= 1) return;
+
+    const prev = document.createElement('button');
+    prev.className = 'page-btn';
+    prev.textContent = '← Prev';
+    prev.disabled = purchasePage === 1;
+    prev.onclick = () => { savePurchasePageInputs(); purchasePage--; renderPurchasePage(); };
+    pg.appendChild(prev);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'page-btn' + (i === purchasePage ? ' active' : '');
+        btn.textContent = i;
+        btn.onclick = ((page) => () => { savePurchasePageInputs(); purchasePage = page; renderPurchasePage(); })(i);
+        pg.appendChild(btn);
+    }
+
+    const next = document.createElement('button');
+    next.className = 'page-btn';
+    next.textContent = 'Next →';
+    next.disabled = purchasePage === totalPages;
+    next.onclick = () => { savePurchasePageInputs(); purchasePage++; renderPurchasePage(); };
+    pg.appendChild(next);
+
+    const info = document.createElement('span');
+    info.className = 'page-info';
+    info.textContent = `Page ${purchasePage} of ${totalPages}`;
+    pg.appendChild(info);
+}
+
+function savePurchasePageInputs() {
+    // Values are saved live via oninput — this is a safety flush
+    document.querySelectorAll('#purchaseGridBody tr').forEach(tr => {
+        const itemName = tr.dataset.itemName;
+        if (!itemName) return;
+        if (!purchaseEntries[itemName]) purchaseEntries[itemName] = {};
+        tr.querySelectorAll('.grid-input').forEach(inp => {
+            purchaseEntries[itemName][inp.dataset.field] = inp.value;
         });
+    });
+}
 
-        function updateDate() {
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('dateDisplay').textContent = now.toLocaleDateString('en-US', options);
-        }
+function clearPurchaseGrid() {
+    purchaseEntries = {};
+    renderPurchasePage();
+}
 
-        function saveApiUrl() {
-            const url = document.getElementById('apiUrl').value.trim();
-            if (!url) {
-                alert('Please enter the Apps Script URL');
-                return;
-            }
-            localStorage.setItem('hotspotApiUrl', url);
-            API_URL = url;
-            document.getElementById('setupBox').style.display = 'none';
-            document.getElementById('mainButtons').style.display = 'grid';
-            loadItemsData();
-        }
+async function submitPurchaseBatch() {
+    savePurchasePageInputs();
 
-        async function loadItemsData() {
-            showLoader('Loading items...');
-            try {
-                const [purchaseRes, stockRes] = await Promise.all([
-                    fetch(API_URL + '?action=getItems'),
-                    fetch(API_URL + '?action=getStockItems')
-                ]);
+    const cat = document.getElementById('purchaseCategory').value;
+    const category = cat;
 
-                const purchaseData = await purchaseRes.json();
-                const stockData = await stockRes.json();
-
-                if (purchaseData.status === 'success') {
-                    purchaseItems = purchaseData.items;
-                    populateCategories('purchaseCategory', Object.keys(purchaseItems));
-                }
-
-                if (stockData.status === 'success') {
-                    stockItems = stockData.items;
-                    populateCategories('stockCategory', Object.keys(stockItems));
-                }
-            } catch (error) {
-                console.error('Error loading items:', error);
-            } finally {
-                hideLoader();
-            }
-        }
-
-        function populateCategories(selectId, categories) {
-            const select = document.getElementById(selectId);
-            categories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat;
-                option.textContent = cat;
-                select.appendChild(option);
+    // Collect fully filled rows
+    const batch = [];
+    purchaseData.forEach(item => {
+        const e = purchaseEntries[item.name] || {};
+        if (e.currentQty !== '' && e.currentQty !== undefined &&
+            e.purchaseQty !== '' && e.purchaseQty !== undefined &&
+            e.unitPrice !== '' && e.unitPrice !== undefined) {
+            batch.push({
+                category,
+                itemName: item.name,
+                unit: item.unit,
+                currentQty: e.currentQty,
+                purchaseQty: e.purchaseQty,
+                unitPrice: e.unitPrice,
+                isUpdate: !!purchaseExisting[item.name]
             });
         }
+    });
 
-        function showPurchaseForm() {
-            document.getElementById('purchaseForm').classList.add('active');
-            document.getElementById('stockForm').classList.remove('active');
-        }
+    if (batch.length === 0) {
+        showToast('No Data Entered', 'Please fill at least one complete row before submitting', 'warning');
+        return;
+    }
 
-        function showStockForm() {
-            document.getElementById('stockForm').classList.add('active');
-            document.getElementById('purchaseForm').classList.remove('active');
-        }
+    // Check for partial rows and warn
+    let partials = 0;
+    purchaseData.forEach(item => {
+        const e = purchaseEntries[item.name] || {};
+        const vals = [e.currentQty, e.purchaseQty, e.unitPrice].filter(v => v !== '' && v !== undefined);
+        if (vals.length > 0 && vals.length < 3) partials++;
+    });
+    if (partials > 0) {
+        if (!confirm(`${partials} row(s) are partially filled and will be skipped. Continue submitting ${batch.length} complete row(s)?`)) return;
+    }
 
-        function closeForm(formId) {
-            document.getElementById(formId).classList.remove('active');
-        }
+    const btn = document.getElementById('purchaseSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = `⏳ Submitting ${batch.length} items...`;
+    showLoader(`Submitting ${batch.length} purchases...`);
 
-        function showDropdown(dropdownId) {
-            document.getElementById(dropdownId).classList.add('active');
-        }
-
-        function hideDropdown(dropdownId) {
-            setTimeout(() => {
-                document.getElementById(dropdownId).classList.remove('active');
-            }, 200);
-        }
-
-        function loadPurchaseItems() {
-            const category = document.getElementById('purchaseCategory').value;
-            if (!category) return;
-
-            const items = purchaseItems[category] || [];
-            const dropdown = document.getElementById('purchaseItemDropdown');
-            dropdown.innerHTML = '';
-
-            items.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'dropdown-item';
-                div.textContent = `${item.name} (${item.unit})`;
-                div.onclick = () => selectPurchaseItem(item, category);
-                dropdown.appendChild(div);
-            });
-
-            document.getElementById('purchaseItemSearch').value = '';
-            document.getElementById('purchaseInputs').style.display = 'none';
-        }
-
-        function filterPurchaseItems() {
-            const searchText = document.getElementById('purchaseItemSearch').value.toLowerCase();
-            const items = document.querySelectorAll('#purchaseItemDropdown .dropdown-item');
-            
-            items.forEach(item => {
-                if (item.textContent.toLowerCase().includes(searchText)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        async function selectPurchaseItem(item, category) {
-            selectedPurchaseItem = { ...item, category };
-            document.getElementById('purchaseItemSearch').value = `${item.name} (${item.unit})`;
-            document.getElementById('purchaseItemDropdown').classList.remove('active');
-            
-            document.getElementById('currentQtyUnit').textContent = item.unit;
-            document.getElementById('purchaseQtyUnit').textContent = item.unit;
-            document.getElementById('unitPriceLabel').textContent = 'per ' + item.unit;
-            
-            // Check if this item already exists today
-            await checkExistingPurchaseEntry(item.name);
-            
-            document.getElementById('purchaseInputs').style.display = 'block';
-        }
-
-        function loadStockItems() {
-            const category = document.getElementById('stockCategory').value;
-            if (!category) return;
-
-            const items = stockItems[category] || [];
-            const dropdown = document.getElementById('stockItemDropdown');
-            dropdown.innerHTML = '';
-
-            items.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'dropdown-item';
-                div.textContent = `${item.name} (${item.unit})`;
-                div.onclick = () => selectStockItem(item, category);
-                dropdown.appendChild(div);
-            });
-
-            document.getElementById('stockItemSearch').value = '';
-            document.getElementById('stockInputs').style.display = 'none';
-        }
-
-        function filterStockItems() {
-            const searchText = document.getElementById('stockItemSearch').value.toLowerCase();
-            const items = document.querySelectorAll('#stockItemDropdown .dropdown-item');
-            
-            items.forEach(item => {
-                if (item.textContent.toLowerCase().includes(searchText)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        async function selectStockItem(item, category) {
-            selectedStockItem = { ...item, category };
-            document.getElementById('stockItemSearch').value = `${item.name} (${item.unit})`;
-            document.getElementById('stockItemDropdown').classList.remove('active');
-            
-            document.getElementById('stockQtyUnit').textContent = item.unit;
-            
-            // Check if this item already exists today
-            await checkExistingStockEntry(item.name);
-            
-            document.getElementById('stockInputs').style.display = 'block';
-        }
-
-        async function checkExistingPurchaseEntry(itemName) {
-            showLoader('Checking existing entry...');
-            try {
-                const response = await fetch(API_URL + '?action=checkExistingPurchase&itemName=' + encodeURIComponent(itemName));
-                const result = await response.json();
-                
-                if (result.status === 'success' && result.exists) {
-                    // Item exists - populate the form with existing data
-                    isUpdatingPurchase = true;
-                    
-                    document.getElementById('currentQty').value = result.data.currentQty;
-                    document.getElementById('purchaseQty').value = result.data.purchaseQty;
-                    document.getElementById('unitPrice').value = result.data.unitPrice;
-                    
-                    // Show update notice
-                    showToast(
-                        'Existing Entry Found', 
-                        `${itemName} was already entered today. Values loaded - you can update them.`, 
-                        'info',
-                        5000
-                    );
-                    
-                    // Change button text
-                    const submitBtn = document.querySelector('#purchaseInputs .submit-btn');
-                    submitBtn.textContent = '✏️ Update Purchase';
-                } else {
-                    // New entry
-                    isUpdatingPurchase = false;
-                    
-                    document.getElementById('currentQty').value = '';
-                    document.getElementById('purchaseQty').value = '';
-                    document.getElementById('unitPrice').value = '';
-                    
-                    // Reset button text
-                    const submitBtn = document.querySelector('#purchaseInputs .submit-btn');
-                    submitBtn.textContent = 'Submit Purchase';
-                }
-            } catch (error) {
-                console.error('Error checking existing purchase:', error);
-                isUpdatingPurchase = false;
-            } finally {
-                hideLoader();
-            }
-        }
-
-        async function checkExistingStockEntry(itemName) {
-            showLoader('Checking existing entry...');
-            try {
-                const response = await fetch(API_URL + '?action=checkExistingStock&itemName=' + encodeURIComponent(itemName));
-                const result = await response.json();
-                
-                if (result.status === 'success' && result.exists) {
-                    // Item exists - populate the form with existing data
-                    isUpdatingStock = true;
-                    
-                    document.getElementById('stockQty').value = result.data.quantity;
-                    
-                    // Show update notice
-                    showToast(
-                        'Existing Entry Found', 
-                        `${itemName} was already entered today. Value loaded - you can update it.`, 
-                        'info',
-                        5000
-                    );
-                    
-                    // Change button text
-                    const submitBtn = document.querySelector('#stockInputs .submit-btn');
-                    submitBtn.textContent = '✏️ Update Stock';
-                } else {
-                    // New entry
-                    isUpdatingStock = false;
-                    
-                    document.getElementById('stockQty').value = '';
-                    
-                    // Reset button text
-                    const submitBtn = document.querySelector('#stockInputs .submit-btn');
-                    submitBtn.textContent = 'Update Stock';
-                }
-            } catch (error) {
-                console.error('Error checking existing stock:', error);
-                isUpdatingStock = false;
-            } finally {
-                hideLoader();
-            }
-        }
-
-        async function submitPurchase() {
-            if (!selectedPurchaseItem) {
-                showStatus('purchaseStatus', 'Please select an item', 'error');
-                return;
-            }
-
-            const currentQty = document.getElementById('currentQty').value;
-            const purchaseQty = document.getElementById('purchaseQty').value;
-            const unitPrice = document.getElementById('unitPrice').value;
-
-            if (!currentQty || !purchaseQty || !unitPrice) {
-                showToast('Missing Information', 'Please fill all fields', 'error');
-                return;
-            }
-
-            const submitBtn = event.target;
-            submitBtn.disabled = true;
-            submitBtn.textContent = isUpdatingPurchase ? 'Updating...' : 'Submitting...';
-            showLoader(isUpdatingPurchase ? 'Updating purchase...' : 'Saving purchase...');
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: 'addPurchase',
-                        category: selectedPurchaseItem.category,
-                        itemName: selectedPurchaseItem.name,
-                        currentQty: currentQty,
-                        purchaseQty: purchaseQty,
-                        unitPrice: unitPrice,
-                        unit: selectedPurchaseItem.unit,
-                        isUpdate: isUpdatingPurchase
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.status === 'success') {
-                    const title = data.updated ? 'Purchase Updated!' : 'Purchase Added!';
-                    const message = `${selectedPurchaseItem.name}: ${purchaseQty} ${selectedPurchaseItem.unit} @ ₹${unitPrice}`;
-                    showToast(title, message, 'success');
-                    resetPurchaseForm();
-                } else {
-                    showToast('Error', data.message || 'Failed to save purchase', 'error');
-                }
-            } catch (error) {
-                showToast('Connection Error', error.message || 'Failed to connect to server', 'error');
-            } finally {
-                hideLoader();
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit Purchase';
-                isUpdatingPurchase = false;
-            }
-        }
-
-        async function submitStock() {
-            if (!selectedStockItem) {
-                showToast('No Item Selected', 'Please select an item first', 'error');
-                return;
-            }
-
-            const quantity = document.getElementById('stockQty').value;
-
-            if (!quantity) {
-                showToast('Missing Information', 'Please enter quantity', 'error');
-                return;
-            }
-
-            const submitBtn = event.target;
-            submitBtn.disabled = true;
-            submitBtn.textContent = isUpdatingStock ? 'Updating...' : 'Updating...';
-            showLoader(isUpdatingStock ? 'Updating stock...' : 'Saving stock...');
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: 'updateStock',
-                        category: selectedStockItem.category,
-                        itemName: selectedStockItem.name,
-                        quantity: quantity,
-                        unit: selectedStockItem.unit,
-                        isUpdate: isUpdatingStock
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.status === 'success') {
-                    const title = data.updated ? 'Stock Updated!' : 'Stock Recorded!';
-                    const message = `${selectedStockItem.name}: ${quantity} ${selectedStockItem.unit}`;
-                    showToast(title, message, 'success');
-                    resetStockForm();
-                } else {
-                    showToast('Error', data.message || 'Failed to update stock', 'error');
-                }
-            } catch (error) {
-                showToast('Connection Error', error.message || 'Failed to connect to server', 'error');
-            } finally {
-                hideLoader();
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Update Stock';
-                isUpdatingStock = false;
-            }
-        }
-
-        function showStatus(elementId, message, type) {
-            const statusEl = document.getElementById(elementId);
-            statusEl.textContent = message;
-            statusEl.className = `status-message ${type}`;
-
-            setTimeout(() => {
-                statusEl.style.display = 'none';
-            }, 5000);
-        }
-
-        function resetPurchaseForm() {
-            document.getElementById('purchaseCategory').value = '';
-            document.getElementById('purchaseItemSearch').value = '';
-            document.getElementById('purchaseInputs').style.display = 'none';
-            document.getElementById('currentQty').value = '';
-            document.getElementById('purchaseQty').value = '';
-            document.getElementById('unitPrice').value = '';
-            selectedPurchaseItem = null;
-        }
-
-        function resetStockForm() {
-            document.getElementById('stockCategory').value = '';
-            document.getElementById('stockItemSearch').value = '';
-            document.getElementById('stockInputs').style.display = 'none';
-            document.getElementById('stockQty').value = '';
-            selectedStockItem = null;
-        }
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.matches('.search-input')) {
-                document.querySelectorAll('.dropdown-list').forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                });
-            }
+    try {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'addPurchaseBatch', items: batch })
         });
-    </script>
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            const added = data.added || 0;
+            const updated = data.updated || 0;
+            showToast(
+                'Purchases Submitted!',
+                `${added} new entries added, ${updated} entries updated`,
+                'success',
+                5000
+            );
+            showStatus('purchaseStatus',
+                `✅ Success! ${added} new entries added, ${updated} entries updated.`, 'success');
+            purchaseEntries = {};
+            // Reload existing to reflect new state
+            const res2 = await fetch(API_URL + '?action=getCategoryPurchase&category=' + encodeURIComponent(cat));
+            const r2 = await res2.json();
+            if (r2.status === 'success') purchaseExisting = r2.items || {};
+            renderPurchasePage();
+        } else {
+            showToast('Submission Failed', data.message || 'Failed to submit purchases', 'error');
+            showStatus('purchaseStatus', '❌ Error: ' + data.message, 'error');
+        }
+    } catch (e) {
+        showToast('Connection Error', e.message || 'Failed to connect to server', 'error');
+        showStatus('purchaseStatus', '❌ Error: ' + e.message, 'error');
+    } finally {
+        hideLoader();
+        btn.disabled = false;
+        btn.textContent = '✅ Submit All Purchases';
+    }
+}
+
+// ─────────────────────────────────────────
+// STOCK GRID
+// ─────────────────────────────────────────
+async function loadStockGrid() {
+    const cat = document.getElementById('stockCategory').value;
+    if (!cat) { document.getElementById('stockGridWrapper').style.display = 'none'; return; }
+
+    stockData = stockItems[cat] || [];
+    stockPage = 1;
+    stockEntries = {};
+    stockExisting = {};
+
+    document.getElementById('stockCatLabel').textContent = '📂 ' + cat;
+    document.getElementById('stockTotalItems').textContent = stockData.length;
+    document.getElementById('stockGridWrapper').style.display = 'block';
+
+    showLoader('Checking today\'s stock entries...');
+    try {
+        const res = await fetch(API_URL + '?action=getCategoryStock&category=' + encodeURIComponent(cat));
+        const result = await res.json();
+        if (result.status === 'success' && result.items) {
+            stockExisting = result.items; // { itemName: quantity }
+        }
+    } catch (e) { console.warn('Could not load existing stock', e); }
+    finally { hideLoader(); }
+
+    renderStockPage();
+}
+
+function renderStockPage() {
+    const tbody = document.getElementById('stockGridBody');
+    tbody.innerHTML = '';
+
+    const total = stockData.length;
+    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    const start = (stockPage - 1) * ITEMS_PER_PAGE;
+    const end = Math.min(start + ITEMS_PER_PAGE, total);
+    const pageItems = stockData.slice(start, end);
+
+    document.getElementById('stockPageRange').textContent = `${start + 1}–${end}`;
+
+    pageItems.forEach((item, idx) => {
+        const globalIdx = start + idx;
+        const existing = stockExisting[item.name];
+        const entry = stockEntries[item.name] || {};
+
+        const qty = entry.quantity !== undefined ? entry.quantity : (existing !== undefined ? existing : '');
+
+        const tr = document.createElement('tr');
+        tr.dataset.itemName = item.name;
+        tr.dataset.unit = item.unit;
+
+        tr.innerHTML = `
+            <td style="color:#aaa;font-size:13px;text-align:center;">${globalIdx + 1}</td>
+            <td>
+                <div class="item-name-cell">${item.name}</div>
+                <div><span class="unit-badge">${item.unit}</span></div>
+            </td>
+            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00"
+                    value="${qty}"
+                    data-field="quantity" data-item="${item.name}"
+                    oninput="onStockInput(this)" onchange="onStockInput(this)"></td>
+            <td><span class="row-status" id="ss-${item.name.replace(/\s+/g,'_')}">—</span></td>
+        `;
+        tbody.appendChild(tr);
+
+        updateStockRowStatus(item.name);
+        styleInputs(tr);
+    });
+
+    renderStockPagination(totalPages);
+    updateStockSummary();
+}
+
+function onStockInput(input) {
+    const itemName = input.dataset.item;
+    const val = input.value;
+
+    if (!stockEntries[itemName]) stockEntries[itemName] = {};
+    stockEntries[itemName].quantity = val;
+
+    styleInputs(input.closest('tr'));
+    updateStockRowStatus(itemName);
+    updateStockSummary();
+}
+
+function updateStockRowStatus(itemName) {
+    const entry = stockEntries[itemName] || {};
+    const existing = stockExisting[itemName];
+    const safeId = itemName.replace(/\s+/g,'_');
+    const el = document.getElementById('ss-' + safeId);
+    if (!el) return;
+
+    const hasQty = entry.quantity !== '' && entry.quantity !== undefined;
+
+    if (!hasQty) {
+        if (existing !== undefined) {
+            el.textContent = '📝 Existing'; el.className = 'row-status existing';
+        } else {
+            el.textContent = '—'; el.className = 'row-status empty';
+        }
+    } else {
+        el.textContent = existing !== undefined ? '✏ Update' : '✅ Ready';
+        el.className = 'row-status ready';
+    }
+}
+
+function updateStockSummary() {
+    let filled = 0, newEntries = 0, updates = 0;
+    Object.keys(stockEntries).forEach(name => {
+        const e = stockEntries[name];
+        if (e.quantity !== '' && e.quantity !== undefined) {
+            filled++;
+            if (stockExisting[name] !== undefined) updates++;
+            else newEntries++;
+        }
+    });
+    document.getElementById('stockFilledCount').textContent = filled;
+    document.getElementById('stockSubmitCount').textContent = filled;
+    document.getElementById('stockNewCount').textContent = newEntries;
+    document.getElementById('stockUpdateCount').textContent = updates;
+}
+
+function renderStockPagination(totalPages) {
+    const pg = document.getElementById('stockPagination');
+    pg.innerHTML = '';
+    if (totalPages <= 1) return;
+
+    const prev = document.createElement('button');
+    prev.className = 'page-btn';
+    prev.textContent = '← Prev';
+    prev.disabled = stockPage === 1;
+    prev.onclick = () => { saveStockPageInputs(); stockPage--; renderStockPage(); };
+    pg.appendChild(prev);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'page-btn' + (i === stockPage ? ' active' : '');
+        btn.textContent = i;
+        btn.onclick = ((page) => () => { saveStockPageInputs(); stockPage = page; renderStockPage(); })(i);
+        pg.appendChild(btn);
+    }
+
+    const next = document.createElement('button');
+    next.className = 'page-btn';
+    next.textContent = 'Next →';
+    next.disabled = stockPage === totalPages;
+    next.onclick = () => { saveStockPageInputs(); stockPage++; renderStockPage(); };
+    pg.appendChild(next);
+
+    const info = document.createElement('span');
+    info.className = 'page-info';
+    info.textContent = `Page ${stockPage} of ${totalPages}`;
+    pg.appendChild(info);
+}
+
+function saveStockPageInputs() {
+    document.querySelectorAll('#stockGridBody tr').forEach(tr => {
+        const itemName = tr.dataset.itemName;
+        if (!itemName) return;
+        if (!stockEntries[itemName]) stockEntries[itemName] = {};
+        tr.querySelectorAll('.grid-input').forEach(inp => {
+            stockEntries[itemName][inp.dataset.field] = inp.value;
+        });
+    });
+}
+
+function clearStockGrid() {
+    stockEntries = {};
+    renderStockPage();
+}
+
+async function submitStockBatch() {
+    saveStockPageInputs();
+
+    const cat = document.getElementById('stockCategory').value;
+
+    const batch = [];
+    stockData.forEach(item => {
+        const e = stockEntries[item.name] || {};
+        if (e.quantity !== '' && e.quantity !== undefined) {
+            batch.push({
+                category: cat,
+                itemName: item.name,
+                unit: item.unit,
+                quantity: e.quantity,
+                isUpdate: stockExisting[item.name] !== undefined
+            });
+        }
+    });
+
+    if (batch.length === 0) {
+        showToast('No Data Entered', 'Please fill at least one row before submitting', 'warning');
+        return;
+    }
+
+    const btn = document.getElementById('stockSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = `⏳ Submitting ${batch.length} items...`;
+    showLoader(`Submitting ${batch.length} stock updates...`);
+
+    try {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'updateStockBatch', items: batch })
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            const added = data.added || 0;
+            const updated = data.updated || 0;
+            showToast(
+                'Stock Updates Submitted!',
+                `${added} new entries added, ${updated} entries updated`,
+                'success',
+                5000
+            );
+            showStatus('stockStatus',
+                `✅ Success! ${added} new entries added, ${updated} entries updated.`, 'success');
+            stockEntries = {};
+            const res2 = await fetch(API_URL + '?action=getCategoryStock&category=' + encodeURIComponent(cat));
+            const r2 = await res2.json();
+            if (r2.status === 'success') stockExisting = r2.items || {};
+            renderStockPage();
+        } else {
+            showToast('Submission Failed', data.message || 'Failed to update stock', 'error');
+            showStatus('stockStatus', '❌ Error: ' + data.message, 'error');
+        }
+    } catch (e) {
+        showToast('Connection Error', e.message || 'Failed to connect to server', 'error');
+        showStatus('stockStatus', '❌ Error: ' + e.message, 'error');
+    } finally {
+        hideLoader();
+        btn.disabled = false;
+        btn.textContent = '✅ Submit All Stock Updates';
+    }
+}
+
+// ─────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────
+function styleInputs(tr) {
+    tr.querySelectorAll('.grid-input').forEach(inp => {
+        inp.classList.toggle('filled', inp.value !== '');
+    });
+}
+
+// Toast notification functions
+function showToast(title, message, type = 'info', duration = 4000) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
+    toast.innerHTML = `
+        <div class="toast-icon">${icons[type] || 'ℹ'}</div>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            ${message ? `<div class="toast-message">${message}</div>` : ''}
+        </div>
+        <button class="toast-close" onclick="closeToast(this)">×</button>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => { closeToast(toast.querySelector('.toast-close')); }, duration);
+}
+
+function closeToast(button) {
+    const toast = button.parentElement;
+    toast.classList.add('hiding');
+    setTimeout(() => { toast.remove(); }, 300);
+}
+
+function showStatus(id, msg, type) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = `status-message ${type}`;
+    setTimeout(() => { el.style.display = 'none'; }, 6000);
+}
+</script>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
 </body>
 </html>
