@@ -480,7 +480,15 @@
 // ─────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────
+// Get API URL from Netlify environment variable or localStorage
+// In Netlify, set environment variable: APPS_SCRIPT_URL
 let API_URL = '';
+
+// Try to get from Netlify env var (injected at build time)
+if (typeof APPS_SCRIPT_URL !== 'undefined' && APPS_SCRIPT_URL) {
+    API_URL = APPS_SCRIPT_URL;
+}
+
 let purchaseItems = {};
 let stockItems = {};
 
@@ -514,13 +522,23 @@ function hideLoader() {
 // ─────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
     updateDate();
-    const savedUrl = localStorage.getItem('hotspotApiUrl');
-    if (savedUrl) {
-        document.getElementById('apiUrl').value = savedUrl;
-        API_URL = savedUrl;
+    
+    // Priority: 1. Netlify env var, 2. localStorage, 3. User input
+    if (API_URL) {
+        // URL from Netlify environment variable
         document.getElementById('setupBox').style.display = 'none';
         document.getElementById('mainButtons').style.display = 'grid';
         loadItemsData();
+    } else {
+        // Fall back to localStorage
+        const savedUrl = localStorage.getItem('hotspotApiUrl');
+        if (savedUrl) {
+            document.getElementById('apiUrl').value = savedUrl;
+            API_URL = savedUrl;
+            document.getElementById('setupBox').style.display = 'none';
+            document.getElementById('mainButtons').style.display = 'grid';
+            loadItemsData();
+        }
     }
 });
 
@@ -832,6 +850,7 @@ async function submitPurchaseBatch() {
     try {
         const res = await fetch(API_URL, {
             method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({ action: 'addPurchaseBatch', items: batch })
         });
         const data = await res.json();
@@ -1071,6 +1090,7 @@ async function submitStockBatch() {
     try {
         const res = await fetch(API_URL, {
             method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({ action: 'updateStockBatch', items: batch })
         });
         const data = await res.json();
