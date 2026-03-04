@@ -9,6 +9,7 @@
     <meta name="theme-color" content="#b8342f">
     <title>Hotspot Restaurant - Inventory Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -493,16 +494,26 @@
             </div>
 
             <div class="form-group">
-                <label>Paste Sales Data (Item Name, Quantity):</label>
-                <textarea id="salesDataInput" rows="10" placeholder="Chicken Dum Biryani (Full), 8
+                <label>Upload PetPooja Excel File:</label>
+                <input type="file" id="petpoojaFile" accept=".xlsx,.xls" 
+                    style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 14px; background: white; cursor: pointer;">
+                <div style="font-size: 13px; color: #666; margin-top: 8px;">
+                    💡 Select the Item Bill Report Excel file from PetPooja
+                </div>
+            </div>
+
+            <div style="margin: 15px 0; text-align: center; color: #999; font-weight: 600;">OR</div>
+
+            <div class="form-group">
+                <label>Paste Sales Data Manually (Item Name, Quantity):</label>
+                <textarea id="salesDataInput" rows="8" placeholder="Chicken Dum Biryani (Full), 8
 Chicken Mughlai Biryani, 5
 Pulka, 59
-Special Veg Fried Rice (Paneer Curry), 5
 
 Format: Item Name, Quantity (one per line)"
                 style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 14px; font-family: 'Courier New', monospace; resize: vertical;"></textarea>
                 <div style="font-size: 13px; color: #666; margin-top: 8px;">
-                    💡 Tip: Copy from PetPooja Excel → Item column + Qty column
+                    💡 Tip: Copy from Excel → Item + Qty columns
                 </div>
             </div>
 
@@ -566,7 +577,7 @@ Format: Item Name, Quantity (one per line)"
 // ─────────────────────────────────────────
 // IMPORTANT: Replace this URL with your actual Google Apps Script deployment URL
 // Get it from: Extensions → Apps Script → Deploy → Web app URL
-let API_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+let API_URL = 'https://script.google.com/macros/s/AKfycbytiF_g4MbMuAnbUgLvR7_9mPhFlkWCUUFRIen35FgDWzBRT4WL0XBmD8LCl7qTHMM2/exec';
 
 // Fallback to localStorage if URL not set
 if (!API_URL || API_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
@@ -1269,6 +1280,7 @@ function showReportForm() {
 
 async function uploadSalesData() {
     const date = document.getElementById('reportDate').value;
+    const fileInput = document.getElementById('petpoojaFile');
     const salesText = document.getElementById('salesDataInput').value.trim();
     
     if (!date) {
@@ -1276,46 +1288,71 @@ async function uploadSalesData() {
         return;
     }
     
-    if (!salesText) {
-        showToast('No Data', 'Please paste sales data', 'warning');
-        return;
-    }
+    let sales = [];
     
-    // Parse sales data
-    const lines = salesText.split('\n');
-    const sales = [];
-    let errors = 0;
-    
-    lines.forEach((line, index) => {
-        line = line.trim();
-        if (!line) return; // Skip empty lines
+    // Check if Excel file is uploaded
+    if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
         
-        // Split by comma
-        const parts = line.split(',');
-        if (parts.length < 2) {
-            errors++;
+        showLoader('Reading Excel file...');
+        
+        try {
+            sales = await parseExcelFile(file);
+            hideLoader();
+            
+            if (sales.length === 0) {
+                showToast('No Data Found', 'Could not find sales data in Excel file', 'error');
+                return;
+            }
+            
+            showToast('Excel Parsed!', `Found ${sales.length} items in file`, 'info', 3000);
+        } catch (e) {
+            hideLoader();
+            showToast('Excel Parse Error', e.message, 'error');
+            return;
+        }
+    }
+    // Else check if manual data is pasted
+    else if (salesText) {
+        // Parse manual text data
+        const lines = salesText.split('\n');
+        let errors = 0;
+        
+        lines.forEach((line, index) => {
+            line = line.trim();
+            if (!line) return; // Skip empty lines
+            
+            // Split by comma
+            const parts = line.split(',');
+            if (parts.length < 2) {
+                errors++;
+                return;
+            }
+            
+            const itemName = parts[0].trim();
+            const quantity = parseFloat(parts[1].trim());
+            
+            if (itemName && !isNaN(quantity) && quantity > 0) {
+                sales.push({ itemName, quantity });
+            } else {
+                errors++;
+            }
+        });
+        
+        if (sales.length === 0) {
+            showToast('Invalid Format', 'No valid sales data found. Format: Item Name, Quantity', 'error');
             return;
         }
         
-        const itemName = parts[0].trim();
-        const quantity = parseFloat(parts[1].trim());
-        
-        if (itemName && !isNaN(quantity) && quantity > 0) {
-            sales.push({ itemName, quantity });
-        } else {
-            errors++;
+        if (errors > 0) {
+            showToast('Parsing Warning', `${errors} line(s) skipped due to format errors`, 'warning');
         }
-    });
-    
-    if (sales.length === 0) {
-        showToast('Invalid Format', 'No valid sales data found. Format: Item Name, Quantity', 'error');
+    } else {
+        showToast('No Data', 'Please upload Excel file OR paste sales data', 'warning');
         return;
     }
     
-    if (errors > 0) {
-        showToast('Parsing Warning', `${errors} line(s) skipped due to format errors`, 'warning');
-    }
-    
+    // Upload to server
     showLoader('Uploading sales data...');
     
     try {
@@ -1338,6 +1375,12 @@ async function uploadSalesData() {
                 4000
             );
             showStatus('reportStatus', `✅ ${data.message}`, 'success');
+            
+            // Clear inputs after successful upload
+            if (fileInput.files) {
+                fileInput.value = '';
+            }
+            document.getElementById('salesDataInput').value = '';
         } else {
             showToast('Upload Failed', data.message || 'Failed to upload sales data', 'error');
             showStatus('reportStatus', '❌ Error: ' + data.message, 'error');
@@ -1348,6 +1391,91 @@ async function uploadSalesData() {
     } finally {
         hideLoader();
     }
+}
+
+// Parse Excel file using SheetJS
+function parseExcelFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                
+                // Get first sheet
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                
+                // Convert to JSON (skip first 4 rows, row 5 is headers)
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { 
+                    range: 4, // Start from row 5 (0-indexed, so 4)
+                    header: 1 // Use first row as headers
+                });
+                
+                if (jsonData.length < 2) {
+                    reject(new Error('No data found in Excel file'));
+                    return;
+                }
+                
+                // First row is headers, data starts from second row
+                const headers = jsonData[0];
+                
+                // Find Item and Qty columns
+                let itemCol = -1;
+                let qtyCol = -1;
+                
+                headers.forEach((header, index) => {
+                    if (header === 'Item') itemCol = index;
+                    if (header === 'Qty.') qtyCol = index;
+                });
+                
+                if (itemCol === -1 || qtyCol === -1) {
+                    reject(new Error('Could not find Item or Qty. columns in Excel file'));
+                    return;
+                }
+                
+                // Parse sales data
+                const sales = [];
+                const itemTotals = {}; // To sum up quantities for same items
+                
+                for (let i = 1; i < jsonData.length; i++) {
+                    const row = jsonData[i];
+                    if (!row || !row[itemCol]) continue;
+                    
+                    const itemName = String(row[itemCol]).trim();
+                    const quantity = parseFloat(row[qtyCol]) || 0;
+                    
+                    if (itemName && quantity > 0) {
+                        // Sum quantities for same item
+                        if (itemTotals[itemName]) {
+                            itemTotals[itemName] += quantity;
+                        } else {
+                            itemTotals[itemName] = quantity;
+                        }
+                    }
+                }
+                
+                // Convert to array
+                for (const itemName in itemTotals) {
+                    sales.push({
+                        itemName: itemName,
+                        quantity: itemTotals[itemName]
+                    });
+                }
+                
+                resolve(sales);
+            } catch (err) {
+                reject(new Error('Failed to parse Excel file: ' + err.message));
+            }
+        };
+        
+        reader.onerror = function() {
+            reject(new Error('Failed to read file'));
+        };
+        
+        reader.readAsArrayBuffer(file);
+    });
 }
 
 async function generateDailyReport() {
