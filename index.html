@@ -40,7 +40,7 @@
         }
 
         .main-buttons {
-            display: grid; grid-template-columns: 1fr 1fr;
+            display: grid; grid-template-columns: 1fr 1fr 1fr;
             gap: 30px; margin-bottom: 40px;
         }
         .main-button {
@@ -319,6 +319,10 @@
         }
 
         .no-items-msg { text-align: center; padding: 40px; color: #aaa; font-size: 16px; }
+        
+        /* Report Section Styles */
+        .report-section { padding: 20px; background: #f8f9fa; border-radius: 12px; margin-bottom: 20px; }
+        .report-section h3 { margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -345,6 +349,7 @@
     <div class="main-buttons" id="mainButtons" style="display:none;">
         <button class="main-button" onclick="showPurchaseForm()">📦 Add Purchase</button>
         <button class="main-button" onclick="showStockForm()">📊 Update Stock</button>
+        <button class="main-button" onclick="showReportForm()">📈 Daily Report</button>
     </div>
 
     <!-- ══════════════════════════════════════
@@ -466,6 +471,85 @@
             </div>
         </div>
     </div>
+
+    <!-- ══════════════════════════════════════
+         DAILY REPORT FORM
+    ══════════════════════════════════════ -->
+    <div class="form-container" id="reportForm">
+        <div class="form-header">
+            <h2>📈 Daily Usage Report</h2>
+            <button class="close-btn" onclick="closeForm('reportForm')">✕ Close</button>
+        </div>
+
+        <div class="status-message" id="reportStatus"></div>
+
+        <!-- Step 1: Upload Sales Data -->
+        <div class="report-section">
+            <h3 style="color: #b8342f; margin-bottom: 15px; font-size: 20px;">📤 Step 1: Upload Sales Data</h3>
+            
+            <div class="form-group">
+                <label>Select Date:</label>
+                <input type="date" id="reportDate" max="">
+            </div>
+
+            <div class="form-group">
+                <label>Paste Sales Data (Item Name, Quantity):</label>
+                <textarea id="salesDataInput" rows="10" placeholder="Chicken Dum Biryani (Full), 8
+Chicken Mughlai Biryani, 5
+Pulka, 59
+Special Veg Fried Rice (Paneer Curry), 5
+
+Format: Item Name, Quantity (one per line)"
+                style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 14px; font-family: 'Courier New', monospace; resize: vertical;"></textarea>
+                <div style="font-size: 13px; color: #666; margin-top: 8px;">
+                    💡 Tip: Copy from PetPooja Excel → Item column + Qty column
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="uploadSalesData()" style="margin-top: 10px;">
+                📤 Upload Sales Data
+            </button>
+        </div>
+
+        <!-- Step 2: Generate Report -->
+        <div class="report-section" style="margin-top: 40px; padding-top: 30px; border-top: 2px solid #eee;">
+            <h3 style="color: #b8342f; margin-bottom: 15px; font-size: 20px;">📊 Step 2: Generate Report</h3>
+            
+            <button class="submit-btn" onclick="generateDailyReport()">
+                📊 Generate Usage Report
+            </button>
+        </div>
+
+        <!-- Report Results -->
+        <div id="reportResults" style="margin-top: 40px; display: none;">
+            <h3 style="color: #b8342f; margin-bottom: 20px; border-bottom: 3px solid #b8342f; padding-bottom: 10px;">
+                📈 Daily Usage Report - <span id="reportDateDisplay"></span>
+            </h3>
+            
+            <div class="grid-table-wrap">
+                <table id="reportGrid">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Ingredient</th>
+                            <th style="width: 15%;">Expected (KG)</th>
+                            <th style="width: 15%;">Actual (KG)</th>
+                            <th style="width: 15%;">Discrepancy</th>
+                            <th style="width: 15%;">Variance %</th>
+                            <th style="width: 15%;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportGridBody"></tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; font-size: 14px;">
+                <strong>Legend:</strong><br>
+                🟢 <strong>Perfect</strong> - No discrepancy<br>
+                🟡 <strong>Under Used</strong> - Used less than expected (good efficiency or over-estimated recipe)<br>
+                🔴 <strong>Over Used</strong> - Used more than expected (wastage, theft, or wrong recipe quantities)
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Loader -->
@@ -480,13 +564,13 @@
 // ─────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────
-// Get API URL from Netlify environment variable or localStorage
-// In Netlify, set environment variable: APPS_SCRIPT_URL
-let API_URL = 'https://script.google.com/macros/s/AKfycbytiF_g4MbMuAnbUgLvR7_9mPhFlkWCUUFRIen35FgDWzBRT4WL0XBmD8LCl7qTHMM2/exec';
+// IMPORTANT: Replace this URL with your actual Google Apps Script deployment URL
+// Get it from: Extensions → Apps Script → Deploy → Web app URL
+let API_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
 
-// Try to get from Netlify env var (injected at build time)
-if (typeof APPS_SCRIPT_URL !== 'undefined' && APPS_SCRIPT_URL) {
-    API_URL = APPS_SCRIPT_URL;
+// Fallback to localStorage if URL not set
+if (!API_URL || API_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
+    API_URL = localStorage.getItem('hotspotApiUrl') || '';
 }
 
 let purchaseItems = {};
@@ -523,14 +607,14 @@ function hideLoader() {
 window.addEventListener('DOMContentLoaded', () => {
     updateDate();
     
-    // Priority: 1. Netlify env var, 2. localStorage, 3. User input
-    if (API_URL) {
-        // URL from Netlify environment variable
+    // Check if URL is hardcoded and valid
+    if (API_URL && API_URL !== 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
+        // URL is set, skip setup and load
         document.getElementById('setupBox').style.display = 'none';
         document.getElementById('mainButtons').style.display = 'grid';
         loadItemsData();
     } else {
-        // Fall back to localStorage
+        // No URL set, check localStorage
         const savedUrl = localStorage.getItem('hotspotApiUrl');
         if (savedUrl) {
             document.getElementById('apiUrl').value = savedUrl;
@@ -539,6 +623,7 @@ window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('mainButtons').style.display = 'grid';
             loadItemsData();
         }
+        // If neither hardcoded nor in localStorage, show setup box
     }
 });
 
@@ -1163,6 +1248,196 @@ function showStatus(id, msg, type) {
     el.textContent = msg;
     el.className = `status-message ${type}`;
     setTimeout(() => { el.style.display = 'none'; }, 6000);
+}
+
+// ─────────────────────────────────────────
+// DAILY REPORT FUNCTIONS
+// ─────────────────────────────────────────
+function showReportForm() {
+    // Set max date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('reportDate').max = today;
+    document.getElementById('reportDate').value = today;
+    
+    document.getElementById('reportForm').classList.add('active');
+    document.getElementById('purchaseForm').classList.remove('active');
+    document.getElementById('stockForm').classList.remove('active');
+    
+    // Hide results on form open
+    document.getElementById('reportResults').style.display = 'none';
+}
+
+async function uploadSalesData() {
+    const date = document.getElementById('reportDate').value;
+    const salesText = document.getElementById('salesDataInput').value.trim();
+    
+    if (!date) {
+        showToast('Date Required', 'Please select a date', 'warning');
+        return;
+    }
+    
+    if (!salesText) {
+        showToast('No Data', 'Please paste sales data', 'warning');
+        return;
+    }
+    
+    // Parse sales data
+    const lines = salesText.split('\n');
+    const sales = [];
+    let errors = 0;
+    
+    lines.forEach((line, index) => {
+        line = line.trim();
+        if (!line) return; // Skip empty lines
+        
+        // Split by comma
+        const parts = line.split(',');
+        if (parts.length < 2) {
+            errors++;
+            return;
+        }
+        
+        const itemName = parts[0].trim();
+        const quantity = parseFloat(parts[1].trim());
+        
+        if (itemName && !isNaN(quantity) && quantity > 0) {
+            sales.push({ itemName, quantity });
+        } else {
+            errors++;
+        }
+    });
+    
+    if (sales.length === 0) {
+        showToast('Invalid Format', 'No valid sales data found. Format: Item Name, Quantity', 'error');
+        return;
+    }
+    
+    if (errors > 0) {
+        showToast('Parsing Warning', `${errors} line(s) skipped due to format errors`, 'warning');
+    }
+    
+    showLoader('Uploading sales data...');
+    
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: 'uploadSalesData',
+                date: date,
+                sales: sales
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            showToast(
+                'Sales Data Uploaded!',
+                `${sales.length} items uploaded for ${date}`,
+                'success',
+                4000
+            );
+            showStatus('reportStatus', `✅ ${data.message}`, 'success');
+        } else {
+            showToast('Upload Failed', data.message || 'Failed to upload sales data', 'error');
+            showStatus('reportStatus', '❌ Error: ' + data.message, 'error');
+        }
+    } catch (e) {
+        showToast('Connection Error', e.message, 'error');
+        showStatus('reportStatus', '❌ Error: ' + e.message, 'error');
+    } finally {
+        hideLoader();
+    }
+}
+
+async function generateDailyReport() {
+    const date = document.getElementById('reportDate').value;
+    
+    if (!date) {
+        showToast('Date Required', 'Please select a date', 'warning');
+        return;
+    }
+    
+    showLoader('Generating report...');
+    
+    try {
+        const response = await fetch(API_URL + '?action=generateDailyReport&date=' + date);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            displayReport(data.report, data.date);
+            showToast('Report Generated!', 'Daily usage report created successfully', 'success');
+        } else {
+            showToast('Report Failed', data.message || 'Failed to generate report', 'error');
+            showStatus('reportStatus', '❌ ' + data.message, 'error');
+        }
+    } catch (e) {
+        showToast('Connection Error', e.message, 'error');
+        showStatus('reportStatus', '❌ Error: ' + e.message, 'error');
+    } finally {
+        hideLoader();
+    }
+}
+
+function displayReport(report, date) {
+    const tbody = document.getElementById('reportGridBody');
+    tbody.innerHTML = '';
+    
+    document.getElementById('reportDateDisplay').textContent = date;
+    
+    if (!report || report.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: #999;">No data available for this date. Make sure you have uploaded sales data and have stock records.</td></tr>';
+        document.getElementById('reportResults').style.display = 'block';
+        return;
+    }
+    
+    report.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        
+        // Determine color and icon based on status
+        let statusColor = '#28a745'; // Green (Perfect)
+        let statusIcon = '🟢';
+        let discrepancyColor = '#999';
+        
+        if (item.status === 'Over Used') {
+            statusColor = '#dc3545'; // Red
+            statusIcon = '🔴';
+            discrepancyColor = '#dc3545';
+        } else if (item.status === 'Under Used') {
+            statusColor = '#ffc107'; // Yellow/Orange
+            statusIcon = '🟡';
+            discrepancyColor = '#e67e22';
+        }
+        
+        // Highlight rows with significant discrepancy
+        if (Math.abs(item.discrepancy) > 0.1) {
+            tr.style.background = item.status === 'Over Used' ? '#fff5f5' : '#fffdf5';
+        }
+        
+        tr.innerHTML = `
+            <td style="font-weight: 600; font-size: 15px;">${item.ingredient}</td>
+            <td style="text-align: center;">${item.expected.toFixed(2)}</td>
+            <td style="text-align: center;">${item.actual.toFixed(2)}</td>
+            <td style="text-align: center; color: ${discrepancyColor}; font-weight: 700;">
+                ${item.discrepancy > 0 ? '+' : ''}${item.discrepancy.toFixed(2)}
+            </td>
+            <td style="text-align: center; color: ${discrepancyColor}; font-weight: 700;">
+                ${item.percentVariance > 0 ? '+' : ''}${item.percentVariance}%
+            </td>
+            <td style="text-align: center;">
+                <span style="background: ${statusColor}; color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; white-space: nowrap;">
+                    ${statusIcon} ${item.status}
+                </span>
+            </td>
+        `;
+        
+        tbody.appendChild(tr);
+    });
+    
+    document.getElementById('reportResults').style.display = 'block';
+    
+    // Scroll to results
+    document.getElementById('reportResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 </script>
 
