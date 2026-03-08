@@ -12,203 +12,94 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-            min-height: 100vh;
-            color: black;
-        }
-
+        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%); min-height: 100vh; color: black; }
         .container { max-width: 1300px; margin: 0 auto; padding: 20px; }
 
-        .header {
-            text-align: center;
-            padding: 30px 0;
-            background: white;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(184,52,47,0.2);
-        }
+        .header { text-align: center; padding: 30px 0; background: white; border-radius: 20px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(184,52,47,0.2); }
         .header h1 { color: #b8342f; font-size: 48px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
         .header p { color: black; font-size: 18px; font-weight: 500; }
 
-        .date-display {
-            background: #b8342f; color: white; padding: 15px 30px;
-            border-radius: 15px; text-align: center; font-size: 20px;
-            font-weight: 600; margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(184,52,47,0.3);
-        }
+        .date-display { background: #b8342f; color: white; padding: 15px 30px; border-radius: 15px; text-align: center; font-size: 20px; font-weight: 600; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(184,52,47,0.3); }
 
-        .main-buttons {
-            display: grid; grid-template-columns: 1fr 1fr 1fr;
-            gap: 30px; margin-bottom: 40px;
-        }
-        .main-button {
-            background: white; border: 4px solid #b8342f;
-            padding: 60px 40px; border-radius: 25px;
-            font-size: 28px; font-weight: 700; color: #b8342f;
-            cursor: pointer; transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-transform: uppercase; letter-spacing: 1px;
-        }
+        .main-buttons { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-bottom: 40px; }
+        .main-button { background: white; border: 4px solid #b8342f; padding: 60px 40px; border-radius: 25px; font-size: 28px; font-weight: 700; color: #b8342f; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-transform: uppercase; letter-spacing: 1px; }
         .main-button:hover { background: #b8342f; color: white; transform: translateY(-5px); box-shadow: 0 15px 40px rgba(184,52,47,0.4); }
-        .main-button:active { transform: translateY(-2px); }
 
         .form-container { display: none; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 15px 50px rgba(0,0,0,0.15); margin-bottom: 30px; }
         .form-container.active { display: block; animation: slideIn 0.3s ease-out; }
-
         @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .form-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #b8342f;
-        }
+        .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid #b8342f; }
         .form-header h2 { color: #b8342f; font-size: 32px; font-weight: 700; }
-        .close-btn {
-            background: #b8342f; color: white; border: none;
-            padding: 12px 25px; border-radius: 10px; font-size: 16px;
-            font-weight: 600; cursor: pointer; transition: all 0.3s;
-        }
-        .close-btn:hover { background: #8e2a26; transform: scale(1.05); }
+        .close-btn { background: #b8342f; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .close-btn:hover { background: #8e2a26; }
 
         .form-group { margin-bottom: 25px; }
         label { display: block; margin-bottom: 10px; color: black; font-weight: 600; font-size: 16px; }
-
-        select, input {
-            width: 100%; padding: 15px; border: 2px solid #ddd;
-            border-radius: 10px; font-size: 16px;
-            font-family: 'Poppins', sans-serif; color: black;
-            background: white; transition: all 0.3s;
-        }
+        select, input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; font-family: 'Poppins', sans-serif; color: black; background: white; transition: all 0.3s; }
         select:focus, input:focus { outline: none; border-color: #b8342f; box-shadow: 0 0 0 3px rgba(184,52,47,0.1); }
 
-        /* ── GRID STYLES ── */
+        /* Grid Styles */
         .grid-wrapper { margin-top: 20px; }
-
-        .grid-info {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 12px; flex-wrap: wrap; gap: 10px;
-        }
+        .grid-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .grid-info-text { font-size: 14px; color: #555; font-weight: 500; }
         .grid-info-text span { color: #b8342f; font-weight: 700; }
-
         .grid-table-wrap { overflow-x: auto; border-radius: 12px; border: 2px solid #e0e0e0; }
-
         table { width: 100%; border-collapse: collapse; min-width: 700px; }
-
         thead tr { background: #b8342f; }
-        thead th {
-            padding: 14px 12px; color: white; font-weight: 600;
-            font-size: 13px; text-align: left; white-space: nowrap;
-        }
+        thead th { padding: 14px 12px; color: white; font-weight: 600; font-size: 13px; text-align: left; white-space: nowrap; }
         thead th:first-child { border-radius: 10px 0 0 0; }
         thead th:last-child { border-radius: 0 10px 0 0; }
-
         tbody tr { border-bottom: 1px solid #eee; transition: background 0.15s; }
         tbody tr:hover { background: #fff8f8; }
         tbody tr:last-child { border-bottom: none; }
-
         tbody td { padding: 8px 10px; vertical-align: middle; }
 
         .item-name-cell { font-weight: 600; font-size: 14px; color: #222; }
-        .unit-badge {
-            display: inline-block; background: #fff0f0; color: #b8342f;
-            border: 1px solid #f5c6c6; border-radius: 6px;
-            padding: 2px 8px; font-size: 12px; font-weight: 600; margin-top: 2px;
-        }
+        .unit-badge { display: inline-block; background: #fff0f0; color: #b8342f; border: 1px solid #f5c6c6; border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 600; margin-top: 2px; }
 
-        .grid-input {
-            width: 100%; padding: 8px 10px; border: 1.5px solid #ddd;
-            border-radius: 8px; font-size: 14px; font-family: 'Poppins', sans-serif;
-            color: black; background: white; transition: border-color 0.2s;
-        }
+        .grid-input { width: 100%; padding: 8px 10px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; font-family: 'Poppins', sans-serif; color: black; background: white; transition: border-color 0.2s; }
         .grid-input:focus { outline: none; border-color: #b8342f; background: #fff8f8; }
         .grid-input.filled { border-color: #28a745; background: #f8fff9; }
-        .grid-input.error-field { border-color: #dc3545 !important; background: #fff5f5 !important; }
 
-        .row-status {
-            font-size: 11px; font-weight: 600; text-align: center;
-            padding: 3px 8px; border-radius: 20px; white-space: nowrap;
-        }
+        .row-status { font-size: 11px; font-weight: 600; text-align: center; padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
         .row-status.empty { color: #aaa; background: #f5f5f5; }
         .row-status.partial { color: #e67e22; background: #fef9f0; }
         .row-status.ready { color: #27ae60; background: #eafaf1; }
         .row-status.existing { color: #2980b9; background: #eaf4fc; }
 
-        /* Pagination */
-        .pagination {
-            display: flex; justify-content: center; align-items: center;
-            gap: 8px; margin-top: 20px; flex-wrap: wrap;
-        }
-        .page-btn {
-            padding: 8px 16px; border: 2px solid #b8342f; border-radius: 8px;
-            background: white; color: #b8342f; font-weight: 600; font-size: 14px;
-            cursor: pointer; transition: all 0.2s; font-family: 'Poppins', sans-serif;
-        }
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+        .page-btn { padding: 8px 16px; border: 2px solid #b8342f; border-radius: 8px; background: white; color: #b8342f; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; font-family: 'Poppins', sans-serif; }
         .page-btn:hover, .page-btn.active { background: #b8342f; color: white; }
         .page-btn:disabled { border-color: #ddd; color: #aaa; cursor: not-allowed; background: white; }
         .page-info { font-size: 14px; color: #555; font-weight: 500; padding: 0 8px; }
 
-        /* Submit area */
         .submit-area { margin-top: 30px; }
-        .submit-summary {
-            background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 12px;
-            padding: 16px 20px; margin-bottom: 16px;
-            display: flex; gap: 20px; flex-wrap: wrap; align-items: center;
-        }
+        .submit-summary { background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
         .summary-item { font-size: 14px; font-weight: 600; color: #555; }
         .summary-item span { color: #b8342f; font-size: 18px; }
 
-        .submit-btn {
-            width: 100%; background: #b8342f; color: white; border: none;
-            padding: 20px; border-radius: 15px; font-size: 20px;
-            font-weight: 700; cursor: pointer; transition: all 0.3s;
-            text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;
-            font-family: 'Poppins', sans-serif;
-        }
+        .submit-btn { width: 100%; background: #b8342f; color: white; border: none; padding: 20px; border-radius: 15px; font-size: 20px; font-weight: 700; cursor: pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; font-family: 'Poppins', sans-serif; }
         .submit-btn:hover { background: #8e2a26; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(184,52,47,0.4); }
         .submit-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .clear-btn {
-            width: 100%; background: white; color: #b8342f;
-            border: 2px solid #b8342f; padding: 14px;
-            border-radius: 12px; font-size: 16px; font-weight: 600;
-            cursor: pointer; transition: all 0.3s; margin-top: 10px;
-            font-family: 'Poppins', sans-serif;
-        }
+        .clear-btn { width: 100%; background: white; color: #b8342f; border: 2px solid #b8342f; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 10px; font-family: 'Poppins', sans-serif; }
         .clear-btn:hover { background: #fff0f0; }
 
-        /* Status messages */
         .status-message { padding: 15px 25px; border-radius: 10px; margin-bottom: 20px; font-weight: 600; display: none; animation: slideIn 0.3s ease-out; }
         .status-message.success { background: #d4edda; color: #155724; border-left: 5px solid #28a745; display: block; }
         .status-message.error { background: #f8d7da; color: #721c24; border-left: 5px solid #dc3545; display: block; }
         .status-message.info { background: #d1ecf1; color: #0c5460; border-left: 5px solid #17a2b8; display: block; }
 
-        /* Loader */
-        .loader-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;
-        }
+        .loader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; }
         .loader-overlay.active { display: flex; }
         .loader-content { background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
         .spinner { width: 60px; height: 60px; border: 6px solid #f3f3f3; border-top: 6px solid #b8342f; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loader-text { color: #b8342f; font-size: 18px; font-weight: 600; }
 
-        /* Toast Notification Styles */
-        .toast-container {
-            position: fixed; top: 20px; right: 20px; z-index: 10000;
-            display: flex; flex-direction: column; gap: 10px; pointer-events: none;
-        }
-        .toast {
-            background: white; padding: 16px 24px; border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            display: flex; align-items: center; gap: 12px;
-            min-width: 300px; max-width: 500px;
-            animation: slideInRight 0.3s ease-out; pointer-events: auto;
-            border-left: 5px solid;
-        }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast { background: white; padding: 16px 24px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 12px; min-width: 300px; max-width: 500px; animation: slideInRight 0.3s ease-out; pointer-events: auto; border-left: 5px solid; }
         .toast.success { border-left-color: #28a745; background: #d4edda; }
         .toast.error { border-left-color: #dc3545; background: #f8d7da; }
         .toast.info { border-left-color: #17a2b8; background: #d1ecf1; }
@@ -225,13 +116,7 @@
         .toast.error .toast-message { color: #721c24; }
         .toast.info .toast-message { color: #0c5460; }
         .toast.warning .toast-message { color: #856404; }
-        .toast-close {
-            background: none; border: none; font-size: 20px; cursor: pointer;
-            padding: 0; width: 24px; height: 24px; display: flex;
-            align-items: center; justify-content: center;
-            border-radius: 50%; transition: background 0.2s;
-            color: inherit; opacity: 0.6;
-        }
+        .toast-close { background: none; border: none; font-size: 20px; cursor: pointer; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background 0.2s; color: inherit; opacity: 0.6; }
         .toast-close:hover { opacity: 1; background: rgba(0,0,0,0.1); }
         @keyframes slideInRight { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
@@ -240,324 +125,285 @@
         .setup-box { background: white; border: 3px solid #b8342f; border-radius: 20px; padding: 30px; margin-bottom: 30px; }
         .setup-box h3 { color: #b8342f; font-size: 24px; margin-bottom: 15px; }
         .setup-box input { margin-bottom: 10px; }
-        .setup-box button { background: #b8342f; color: white; border: none; padding: 12px 30px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif; }
-        .setup-box button:hover { background: #8e2a26; }
+        .setup-box button { background: #b8342f; color: white; border: none; padding: 12px 30px; border-radius: 10px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; }
 
-        /* Touch-friendly improvements */
-        button, .main-button, select, input {
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        button:active, .main-button:active { opacity: 0.9; }
+        .cat-label { display: inline-flex; align-items: center; gap: 6px; background: #fff0f0; border: 1.5px solid #f5c6c6; border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 600; color: #b8342f; margin-bottom: 16px; }
+        .no-items-msg { text-align: center; padding: 40px; color: #aaa; font-size: 16px; }
 
-        /* Mobile Responsive Styles */
+        /* ═══ REPORT STYLES ═══ */
+        .report-section { padding: 20px; background: #f8f9fa; border-radius: 12px; margin-bottom: 20px; }
+
+        /* No-Recipe Alert Banner */
+        .no-recipe-alert { background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+        .no-recipe-alert-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .no-recipe-alert-header h4 { color: #856404; font-size: 16px; font-weight: 700; }
+        .no-recipe-item-row { display: flex; align-items: center; justify-content: space-between; background: white; border: 1px solid #ffc107; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+        .no-recipe-item-name { font-weight: 600; font-size: 14px; color: #333; flex: 1; min-width: 200px; }
+        .no-recipe-item-qty { font-size: 13px; color: #666; background: #fff3cd; padding: 3px 10px; border-radius: 12px; }
+        .no-recipe-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .btn-add-recipe { background: #b8342f; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; white-space: nowrap; }
+        .btn-add-recipe:hover { background: #8e2a26; }
+        .btn-not-tracked { background: white; color: #666; border: 2px solid #ccc; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; white-space: nowrap; }
+        .btn-not-tracked:hover { background: #f5f5f5; border-color: #999; }
+
+        /* Show Usage button in report grid */
+        .btn-show-usage { background: white; color: #b8342f; border: 2px solid #b8342f; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; white-space: nowrap; }
+        .btn-show-usage:hover { background: #b8342f; color: white; }
+
+        /* Usage Breakdown Panel */
+        .usage-breakdown-panel { background: #f0f7ff; border: 2px solid #b8d4f0; border-radius: 12px; padding: 20px; margin-top: 10px; animation: slideIn 0.3s ease-out; }
+        .usage-breakdown-panel h4 { color: #1a5276; font-size: 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        .usage-breakdown-panel table { min-width: 400px; }
+        .usage-breakdown-close { background: none; border: none; font-size: 18px; cursor: pointer; color: #666; margin-left: auto; }
+
+        /* Not-Tracked Section */
+        .not-tracked-section { background: #f5f5f5; border: 2px solid #ccc; border-radius: 12px; padding: 16px 20px; margin: 20px 0; }
+        .not-tracked-section h4 { color: #555; font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+        .not-tracked-chip { display: inline-flex; align-items: center; gap: 6px; background: white; border: 1.5px solid #ccc; border-radius: 20px; padding: 4px 12px; font-size: 13px; font-weight: 500; color: #555; margin: 4px; }
+        .not-tracked-chip button { background: none; border: none; cursor: pointer; color: #dc3545; font-size: 16px; padding: 0; line-height: 1; }
+
+        /* ═══ ADD RECIPE MODAL ═══ */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99999; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-box { background: white; border-radius: 20px; padding: 30px; max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #b8342f; }
+        .modal-header h3 { color: #b8342f; font-size: 22px; font-weight: 700; }
+        .modal-close { background: none; border: none; font-size: 28px; cursor: pointer; color: #999; transition: color 0.2s; }
+        .modal-close:hover { color: #b8342f; }
+
+        .modal-dish-name { background: #fff0f0; border: 2px solid #f5c6c6; border-radius: 10px; padding: 12px 16px; font-size: 16px; font-weight: 700; color: #b8342f; margin-bottom: 20px; }
+
+        .ingredient-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; padding: 12px; background: #f8f9fa; border-radius: 10px; border: 1px solid #e0e0e0; }
+        .ingredient-row-num { background: #b8342f; color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; margin-top: 4px; }
+        .ingredient-row-fields { flex: 1; display: grid; grid-template-columns: 1fr 100px 80px; gap: 8px; }
+        .ingredient-row-fields select, .ingredient-row-fields input { padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; font-family: 'Poppins', sans-serif; }
+        .ingredient-row-fields select:focus, .ingredient-row-fields input:focus { outline: none; border-color: #b8342f; }
+        .ingredient-row-remove { background: none; border: 2px solid #dc3545; color: #dc3545; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all 0.2s; }
+        .ingredient-row-remove:hover { background: #dc3545; color: white; }
+
+        .btn-add-ingredient-row { width: 100%; padding: 12px; border: 2px dashed #b8342f; background: white; color: #b8342f; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; margin-bottom: 20px; }
+        .btn-add-ingredient-row:hover { background: #fff0f0; }
+
+        .modal-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .modal-save-btn { flex: 1; background: #b8342f; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.3s; min-width: 140px; }
+        .modal-save-btn:hover { background: #8e2a26; }
+        .modal-save-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .modal-cancel-btn { background: white; color: #666; border: 2px solid #ccc; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s; min-width: 100px; }
+        .modal-cancel-btn:hover { background: #f5f5f5; }
+
+        /* ═══ RESPONSIVE ═══ */
+        button, .main-button, select, input { -webkit-tap-highlight-color: transparent; }
+
         @media (max-width: 768px) {
-            body { padding: 10px; }
             .container { padding: 10px; }
-            .header { padding: 20px 15px; margin-bottom: 20px; }
-            .header h1 { font-size: 32px; letter-spacing: 1px; }
-            .header p { font-size: 14px; }
-            .date-display { font-size: 16px; padding: 12px 20px; margin-bottom: 20px; }
-            .main-buttons { grid-template-columns: 1fr; gap: 15px; margin-bottom: 30px; }
+            .header { padding: 20px 15px; }
+            .header h1 { font-size: 32px; }
+            .main-buttons { grid-template-columns: 1fr; gap: 15px; }
             .main-button { padding: 40px 30px; font-size: 22px; }
-            .form-container { padding: 20px; border-radius: 15px; }
+            .form-container { padding: 20px; }
             .form-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .form-header h2 { font-size: 24px; }
-            .close-btn { width: 100%; padding: 14px; }
-            label { font-size: 15px; }
-            select, input, textarea { font-size: 16px; padding: 14px; }
-            .grid-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            .grid-input { font-size: 16px; padding: 10px; }
-            .submit-btn, .clear-btn { padding: 16px; font-size: 16px; }
-            .submit-area { flex-direction: column; gap: 15px; }
-            .submit-summary { flex-direction: column; gap: 8px; }
-            .setup-box { padding: 20px; border-width: 2px; }
-            .setup-box h3 { font-size: 20px; }
+            .close-btn { width: 100%; }
+            select, input { font-size: 16px; padding: 14px; }
+            .submit-btn { padding: 16px; font-size: 16px; }
             .toast-container { top: 10px; left: 10px; right: 10px; }
-            .toast { min-width: auto; padding: 14px 18px; }
-            .toast-icon { font-size: 20px; }
-            .toast-title { font-size: 15px; }
-            .toast-message { font-size: 13px; }
-            .loader-content { padding: 30px; }
-            .spinner { width: 50px; height: 50px; }
-            .loader-text { font-size: 16px; }
-            .pagination { flex-wrap: wrap; gap: 8px; }
-            .page-btn { padding: 8px 12px; font-size: 14px; }
-            .cat-label { font-size: 14px; padding: 6px 12px; }
-            .grid-info-text { font-size: 13px; }
+            .toast { min-width: auto; }
+            .no-recipe-item-row { flex-direction: column; }
+            .ingredient-row-fields { grid-template-columns: 1fr 80px 70px; }
+            .modal-box { padding: 20px; }
+            .date-display { font-size: 16px; }
         }
-
         @media (max-width: 480px) {
-            .header h1 { font-size: 28px; }
-            .main-button { padding: 35px 25px; font-size: 20px; }
-            .form-header h2 { font-size: 22px; }
-            .form-container { padding: 15px; }
-            .date-display { font-size: 14px; }
+            .header h1 { font-size: 26px; }
+            .main-button { padding: 30px 20px; font-size: 20px; }
+            .ingredient-row-fields { grid-template-columns: 1fr; }
         }
-
-        @media (max-width: 768px) and (orientation: landscape) {
-            .header h1 { font-size: 28px; }
-            .main-button { padding: 30px 25px; font-size: 20px; }
-            .loader-content { padding: 25px; }
-        }
-
         @media (hover: none) and (pointer: coarse) {
-            select, input, textarea, button { min-height: 44px; }
+            select, input, button { min-height: 44px; }
             .main-button { min-height: 80px; }
-            .form-group { margin-bottom: 25px; }
-            .page-btn { min-height: 44px; min-width: 44px; }
         }
-
-        /* Category label chip */
-        .cat-label {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: #fff0f0; border: 1.5px solid #f5c6c6;
-            border-radius: 8px; padding: 8px 14px;
-            font-size: 14px; font-weight: 600; color: #b8342f;
-            margin-bottom: 16px;
-        }
-
-        .no-items-msg { text-align: center; padding: 40px; color: #aaa; font-size: 16px; }
-        
-        /* Report Section Styles */
-        .report-section { padding: 20px; background: #f8f9fa; border-radius: 12px; margin-bottom: 20px; }
-        .report-section h3 { margin-bottom: 15px; }
     </style>
 </head>
 <body>
 <div class="container">
 
-    <!-- Header -->
     <div class="header">
         <h1>🍽️ HOTSPOT</h1>
         <p>Restaurant Inventory Management</p>
     </div>
 
-    <!-- Setup -->
     <div class="setup-box" id="setupBox">
         <h3>⚙️ Setup Required</h3>
-        <p style="margin-bottom:15px;color:black;">Enter your Google Apps Script Web App URL to get started:</p>
+        <p style="margin-bottom:15px;color:black;">Enter your Google Apps Script Web App URL:</p>
         <input type="url" id="apiUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
         <button onclick="saveApiUrl()">Save & Continue</button>
     </div>
 
-    <!-- Date -->
     <div class="date-display" id="dateDisplay"></div>
 
-    <!-- Main Buttons -->
     <div class="main-buttons" id="mainButtons" style="display:none;">
         <button class="main-button" onclick="showPurchaseForm()">📦 Add Purchase</button>
         <button class="main-button" onclick="showStockForm()">📊 Update Stock</button>
         <button class="main-button" onclick="showReportForm()">📈 Daily Report</button>
     </div>
 
-    <!-- ══════════════════════════════════════
-         PURCHASE FORM
-    ══════════════════════════════════════ -->
+    <!-- ══════════════════ PURCHASE FORM ══════════════════ -->
     <div class="form-container" id="purchaseForm">
         <div class="form-header">
             <h2>📦 Add Purchase</h2>
             <button class="close-btn" onclick="closeForm('purchaseForm')">✕ Close</button>
         </div>
-
         <div class="status-message" id="purchaseStatus"></div>
-
         <div class="form-group">
             <label>Category:</label>
             <select id="purchaseCategory" onchange="loadPurchaseGrid()">
                 <option value="">-- Select Category --</option>
             </select>
         </div>
-
-        <!-- Grid area -->
         <div class="grid-wrapper" id="purchaseGridWrapper" style="display:none;">
             <div class="cat-label" id="purchaseCatLabel">📂 Category</div>
             <div class="grid-info">
-                <div class="grid-info-text">
-                    Showing <span id="purchasePageRange">-</span> of <span id="purchaseTotalItems">-</span> items &nbsp;|&nbsp;
-                    <span id="purchaseFilledCount">0</span> rows filled
-                </div>
-                <div style="font-size:13px;color:#888;">Fill in the rows you want to submit — leave others blank</div>
+                <div class="grid-info-text">Showing <span id="purchasePageRange">-</span> of <span id="purchaseTotalItems">-</span> items &nbsp;|&nbsp; <span id="purchaseFilledCount">0</span> rows filled</div>
+                <div style="font-size:13px;color:#888;">Fill rows you want to submit — leave others blank</div>
             </div>
-
             <div class="grid-table-wrap">
                 <table id="purchaseGrid">
-                    <thead>
-                        <tr>
-                            <th style="width:30px;">#</th>
-                            <th>Item Name</th>
-                            <th style="width:130px;">Current Qty</th>
-                            <th style="width:130px;">Purchase Qty</th>
-                            <th style="width:130px;">Unit Price (₹)</th>
-                            <th style="width:90px;">Status</th>
-                        </tr>
-                    </thead>
+                    <thead><tr>
+                        <th style="width:30px;">#</th>
+                        <th>Item Name</th>
+                        <th style="width:130px;">Current Qty</th>
+                        <th style="width:130px;">Purchase Qty</th>
+                        <th style="width:130px;">Unit Price (₹)</th>
+                        <th style="width:90px;">Status</th>
+                    </tr></thead>
                     <tbody id="purchaseGridBody"></tbody>
                 </table>
             </div>
-
             <div class="pagination" id="purchasePagination"></div>
-
             <div class="submit-area">
                 <div class="submit-summary">
-                    <div class="summary-item">Total items to submit: <span id="purchaseSubmitCount">0</span></div>
-                    <div class="summary-item">New entries: <span id="purchaseNewCount">0</span></div>
+                    <div class="summary-item">Total: <span id="purchaseSubmitCount">0</span></div>
+                    <div class="summary-item">New: <span id="purchaseNewCount">0</span></div>
                     <div class="summary-item">Updates: <span id="purchaseUpdateCount">0</span></div>
                 </div>
-                <button class="submit-btn" id="purchaseSubmitBtn" onclick="submitPurchaseBatch()">
-                    ✅ Submit All Purchases
-                </button>
+                <button class="submit-btn" id="purchaseSubmitBtn" onclick="submitPurchaseBatch()">✅ Submit All Purchases</button>
                 <button class="clear-btn" onclick="clearPurchaseGrid()">🗑️ Clear All Entries</button>
             </div>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         STOCK FORM
-    ══════════════════════════════════════ -->
+    <!-- ══════════════════ STOCK FORM ══════════════════ -->
     <div class="form-container" id="stockForm">
         <div class="form-header">
             <h2>📊 Update Stock</h2>
             <button class="close-btn" onclick="closeForm('stockForm')">✕ Close</button>
         </div>
-
         <div class="status-message" id="stockStatus"></div>
-
         <div class="form-group">
             <label>Category:</label>
             <select id="stockCategory" onchange="loadStockGrid()">
                 <option value="">-- Select Category --</option>
             </select>
         </div>
-
-        <!-- Grid area -->
         <div class="grid-wrapper" id="stockGridWrapper" style="display:none;">
             <div class="cat-label" id="stockCatLabel">📂 Category</div>
             <div class="grid-info">
-                <div class="grid-info-text">
-                    Showing <span id="stockPageRange">-</span> of <span id="stockTotalItems">-</span> items &nbsp;|&nbsp;
-                    <span id="stockFilledCount">0</span> rows filled
-                </div>
-                <div style="font-size:13px;color:#888;">Fill in the rows you want to submit — leave others blank</div>
+                <div class="grid-info-text">Showing <span id="stockPageRange">-</span> of <span id="stockTotalItems">-</span> items &nbsp;|&nbsp; <span id="stockFilledCount">0</span> rows filled</div>
+                <div style="font-size:13px;color:#888;">Fill rows you want to submit — leave others blank</div>
             </div>
-
             <div class="grid-table-wrap">
                 <table id="stockGrid">
-                    <thead>
-                        <tr>
-                            <th style="width:30px;">#</th>
-                            <th>Item Name</th>
-                            <th style="width:160px;">Quantity</th>
-                            <th style="width:90px;">Status</th>
-                        </tr>
-                    </thead>
+                    <thead><tr>
+                        <th style="width:30px;">#</th>
+                        <th>Item Name</th>
+                        <th style="width:160px;">Quantity</th>
+                        <th style="width:90px;">Status</th>
+                    </tr></thead>
                     <tbody id="stockGridBody"></tbody>
                 </table>
             </div>
-
             <div class="pagination" id="stockPagination"></div>
-
             <div class="submit-area">
                 <div class="submit-summary">
-                    <div class="summary-item">Total items to submit: <span id="stockSubmitCount">0</span></div>
-                    <div class="summary-item">New entries: <span id="stockNewCount">0</span></div>
+                    <div class="summary-item">Total: <span id="stockSubmitCount">0</span></div>
+                    <div class="summary-item">New: <span id="stockNewCount">0</span></div>
                     <div class="summary-item">Updates: <span id="stockUpdateCount">0</span></div>
                 </div>
-                <button class="submit-btn" id="stockSubmitBtn" onclick="submitStockBatch()">
-                    ✅ Submit All Stock Updates
-                </button>
+                <button class="submit-btn" id="stockSubmitBtn" onclick="submitStockBatch()">✅ Submit All Stock Updates</button>
                 <button class="clear-btn" onclick="clearStockGrid()">🗑️ Clear All Entries</button>
             </div>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         DAILY REPORT FORM
-    ══════════════════════════════════════ -->
+    <!-- ══════════════════ REPORT FORM ══════════════════ -->
     <div class="form-container" id="reportForm">
         <div class="form-header">
             <h2>📈 Daily Usage Report</h2>
             <button class="close-btn" onclick="closeForm('reportForm')">✕ Close</button>
         </div>
-
         <div class="status-message" id="reportStatus"></div>
 
-        <!-- Step 1: Upload Sales Data -->
+        <!-- Step 1 -->
         <div class="report-section">
-            <h3 style="color: #b8342f; margin-bottom: 15px; font-size: 20px;">📤 Step 1: Upload Sales Data</h3>
-            
+            <h3 style="color:#b8342f;margin-bottom:15px;font-size:20px;">📤 Step 1: Upload Sales Data</h3>
             <div class="form-group">
                 <label>Select Date:</label>
-                <input type="date" id="reportDate" max="">
+                <input type="date" id="reportDate">
             </div>
-
             <div class="form-group">
                 <label>Upload PetPooja Excel File:</label>
-                <input type="file" id="petpoojaFile" accept=".xlsx,.xls" 
-                    style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 14px; background: white; cursor: pointer;">
-                <div style="font-size: 13px; color: #666; margin-top: 8px;">
-                    💡 Select the Item Bill Report Excel file from PetPooja
-                </div>
+                <input type="file" id="petpoojaFile" accept=".xlsx,.xls" style="padding:15px;border:2px solid #ddd;border-radius:10px;font-size:14px;background:white;cursor:pointer;">
+                <div style="font-size:13px;color:#666;margin-top:8px;">💡 Select the Item Bill Report Excel file from PetPooja</div>
             </div>
-
-            <div style="margin: 15px 0; text-align: center; color: #999; font-weight: 600;">OR</div>
-
+            <div style="margin:15px 0;text-align:center;color:#999;font-weight:600;">OR</div>
             <div class="form-group">
                 <label>Paste Sales Data Manually (Item Name, Quantity):</label>
-                <textarea id="salesDataInput" rows="8" placeholder="Chicken Dum Biryani (Full), 8
-Chicken Mughlai Biryani, 5
-Pulka, 59
+                <textarea id="salesDataInput" rows="8" placeholder="Chicken Dum Biryani (Full), 8&#10;Chicken Mughlai Biryani, 5&#10;Pulka, 59&#10;&#10;Format: Item Name, Quantity (one per line)" style="width:100%;padding:15px;border:2px solid #ddd;border-radius:10px;font-size:14px;font-family:'Courier New',monospace;resize:vertical;"></textarea>
+            </div>
+            <button class="submit-btn" onclick="uploadSalesData()">📤 Upload Sales Data</button>
+        </div>
 
-Format: Item Name, Quantity (one per line)"
-                style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 14px; font-family: 'Courier New', monospace; resize: vertical;"></textarea>
-                <div style="font-size: 13px; color: #666; margin-top: 8px;">
-                    💡 Tip: Copy from Excel → Item + Qty columns
-                </div>
+        <!-- Step 2 -->
+        <div class="report-section" style="margin-top:30px;">
+            <h3 style="color:#b8342f;margin-bottom:15px;font-size:20px;">📊 Step 2: Generate Report</h3>
+
+            <!-- Not-tracked items display -->
+            <div id="notTrackedSection" class="not-tracked-section" style="display:none;">
+                <h4>🚫 Not-Tracked Items (ignored in report)</h4>
+                <div id="notTrackedChips"></div>
             </div>
 
-            <button class="submit-btn" onclick="uploadSalesData()" style="margin-top: 10px;">
-                📤 Upload Sales Data
-            </button>
+            <button class="submit-btn" onclick="generateDailyReport()">📊 Generate Usage Report</button>
         </div>
 
-        <!-- Step 2: Generate Report -->
-        <div class="report-section" style="margin-top: 40px; padding-top: 30px; border-top: 2px solid #eee;">
-            <h3 style="color: #b8342f; margin-bottom: 15px; font-size: 20px;">📊 Step 2: Generate Report</h3>
-            
-            <button class="submit-btn" onclick="generateDailyReport()">
-                📊 Generate Usage Report
-            </button>
-        </div>
+        <!-- No-Recipe Alert -->
+        <div id="noRecipeAlert" style="display:none;"></div>
 
         <!-- Report Results -->
-        <div id="reportResults" style="margin-top: 40px; display: none;">
-            <h3 style="color: #b8342f; margin-bottom: 20px; border-bottom: 3px solid #b8342f; padding-bottom: 10px;">
-                📈 Daily Usage Report - <span id="reportDateDisplay"></span>
+        <div id="reportResults" style="margin-top:30px;display:none;">
+            <h3 style="color:#b8342f;margin-bottom:20px;border-bottom:3px solid #b8342f;padding-bottom:10px;">
+                📈 Daily Usage Report — <span id="reportDateDisplay"></span>
             </h3>
-            
             <div class="grid-table-wrap">
                 <table id="reportGrid">
-                    <thead>
-                        <tr>
-                            <th style="width: 25%;">Ingredient</th>
-                            <th style="width: 15%;">Expected (KG)</th>
-                            <th style="width: 15%;">Actual (KG)</th>
-                            <th style="width: 15%;">Discrepancy</th>
-                            <th style="width: 15%;">Variance %</th>
-                            <th style="width: 15%;">Status</th>
-                        </tr>
-                    </thead>
+                    <thead><tr>
+                        <th style="width:22%;">Ingredient</th>
+                        <th style="width:13%;">Expected (KG)</th>
+                        <th style="width:13%;">Actual (KG)</th>
+                        <th style="width:13%;">Discrepancy</th>
+                        <th style="width:12%;">Variance %</th>
+                        <th style="width:13%;">Status</th>
+                        <th style="width:14%;">Details</th>
+                    </tr></thead>
                     <tbody id="reportGridBody"></tbody>
                 </table>
             </div>
-
-            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; font-size: 14px;">
-                <strong>Legend:</strong><br>
-                🟢 <strong>Perfect</strong> - No discrepancy<br>
-                🟡 <strong>Under Used</strong> - Used less than expected (good efficiency or over-estimated recipe)<br>
-                🔴 <strong>Over Used</strong> - Used more than expected (wastage, theft, or wrong recipe quantities)
+            <div style="margin-top:20px;padding:15px;background:#f8f9fa;border-radius:10px;font-size:14px;">
+                <strong>Legend:</strong>&nbsp;
+                🟢 <strong>Perfect</strong> &nbsp;|&nbsp;
+                🟡 <strong>Under Used</strong> — less than expected &nbsp;|&nbsp;
+                🔴 <strong>Over Used</strong> — wastage / wrong recipe
             </div>
         </div>
     </div>
@@ -571,75 +417,88 @@ Format: Item Name, Quantity (one per line)"
     </div>
 </div>
 
-<script>
-// ─────────────────────────────────────────
-// STATE
-// ─────────────────────────────────────────
-// IMPORTANT: Replace this URL with your actual Google Apps Script deployment URL
-// Get it from: Extensions → Apps Script → Deploy → Web app URL
-let API_URL = 'https://script.google.com/macros/s/AKfycbyAbIZG-WP3M15VrsuP3bGKNmbKnHk4SyHJsZ_J9CRs-4hJEFCUVxNfujTiVZKTioVr/exec';
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
 
-// Fallback to localStorage if URL not set
+<!-- ══════════════════ ADD RECIPE MODAL ══════════════════ -->
+<div class="modal-overlay" id="addRecipeModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>📝 Add Recipe Ingredients</h3>
+            <button class="modal-close" onclick="closeRecipeModal()">×</button>
+        </div>
+        <div class="modal-dish-name" id="modalDishName"></div>
+        <p style="font-size:14px;color:#666;margin-bottom:16px;">Add the raw ingredients used per serving of this dish. Quantities should be in KG or appropriate units.</p>
+        <div id="ingredientRowsContainer"></div>
+        <button class="btn-add-ingredient-row" onclick="addIngredientRow()">+ Add Another Ingredient</button>
+        <div class="modal-actions">
+            <button class="modal-save-btn" id="modalSaveBtn" onclick="saveRecipeIngredients()">💾 Save Recipe</button>
+            <button class="modal-cancel-btn" onclick="closeRecipeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ═════════════════════════════════════════
+// STATE
+// ═════════════════════════════════════════
+let API_URL = 'https://script.google.com/macros/s/AKfycbyA6NWz7tyCnCjyWKd8bI4-iRpx5Ze_rwVkSS-O_0dHkgCvte6rY1FRkquS6F82VLdX/exec';
 if (!API_URL || API_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
     API_URL = localStorage.getItem('hotspotApiUrl') || '';
 }
 
-let purchaseItems = {};
-let stockItems = {};
-
+let purchaseItems = {}, stockItems = {};
 const ITEMS_PER_PAGE = 10;
 
-// Purchase grid state
-let purchaseData = [];      // all items in selected category
-let purchasePage = 1;
-let purchaseExisting = {};  // { itemName: {currentQty, purchaseQty, unitPrice} }
-let purchaseEntries = {};   // { itemName: {currentQty, purchaseQty, unitPrice} } — user input
+let purchaseData = [], purchasePage = 1, purchaseExisting = {}, purchaseEntries = {};
+let stockData = [], stockPage = 1, stockExisting = {}, stockEntries = {};
 
-// Stock grid state
-let stockData = [];
-let stockPage = 1;
-let stockExisting = {};     // { itemName: quantity }
-let stockEntries = {};      // { itemName: quantity }
+// Report state
+let currentReportDate = '';
+let allIngredientsList = [];   // for recipe modal dropdown
+let notTrackedItems = [];       // items marked as not tracked
+let currentModalDish = '';      // dish being edited in modal
+let ingredientRowCount = 0;     // counter for ingredient rows in modal
 
-// ─────────────────────────────────────────
+// Active usage breakdown panels
+let activeBreakdownPanels = new Set();
+
+// ═════════════════════════════════════════
 // LOADER
-// ─────────────────────────────────────────
+// ═════════════════════════════════════════
 function showLoader(msg = 'Loading...') {
     document.getElementById('loaderText').textContent = msg;
     document.getElementById('loaderOverlay').classList.add('active');
 }
-function hideLoader() {
-    document.getElementById('loaderOverlay').classList.remove('active');
-}
+function hideLoader() { document.getElementById('loaderOverlay').classList.remove('active'); }
 
-// ─────────────────────────────────────────
+// ═════════════════════════════════════════
 // INIT
-// ─────────────────────────────────────────
+// ═════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
     updateDate();
-    
-    // Check if URL is hardcoded and valid
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('reportDate').max = today;
+    document.getElementById('reportDate').value = today;
+
     if (API_URL && API_URL !== 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
-        // URL is set, skip setup and load
         document.getElementById('setupBox').style.display = 'none';
         document.getElementById('mainButtons').style.display = 'grid';
         loadItemsData();
     } else {
-        // No URL set, check localStorage
-        const savedUrl = localStorage.getItem('hotspotApiUrl');
-        if (savedUrl) {
-            document.getElementById('apiUrl').value = savedUrl;
-            API_URL = savedUrl;
+        const saved = localStorage.getItem('hotspotApiUrl');
+        if (saved) {
+            document.getElementById('apiUrl').value = saved;
+            API_URL = saved;
             document.getElementById('setupBox').style.display = 'none';
             document.getElementById('mainButtons').style.display = 'grid';
             loadItemsData();
         }
-        // If neither hardcoded nor in localStorage, show setup box
     }
 });
 
 function updateDate() {
-    const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
     document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', opts);
 }
 
@@ -656,154 +515,92 @@ function saveApiUrl() {
 async function loadItemsData() {
     showLoader('Loading items...');
     try {
-        const [pRes, sRes] = await Promise.all([
+        const [pRes, sRes, ingRes, ntRes] = await Promise.all([
             fetch(API_URL + '?action=getItems'),
-            fetch(API_URL + '?action=getStockItems')
+            fetch(API_URL + '?action=getStockItems'),
+            fetch(API_URL + '?action=getAllIngredients'),
+            fetch(API_URL + '?action=getNotTrackedItems')
         ]);
-        const pData = await pRes.json();
-        const sData = await sRes.json();
+        const [pData, sData, ingData, ntData] = await Promise.all([pRes.json(), sRes.json(), ingRes.json(), ntRes.json()]);
 
-        if (pData.status === 'success') {
-            purchaseItems = pData.items;
-            populateCategories('purchaseCategory', Object.keys(purchaseItems));
-        }
-        if (sData.status === 'success') {
-            stockItems = sData.items;
-            populateCategories('stockCategory', Object.keys(stockItems));
-        }
-    } catch (e) {
-        console.error('Error loading items:', e);
-    } finally {
-        hideLoader();
-    }
+        if (pData.status === 'success') { purchaseItems = pData.items; populateCategories('purchaseCategory', Object.keys(purchaseItems)); }
+        if (sData.status === 'success') { stockItems = sData.items; populateCategories('stockCategory', Object.keys(stockItems)); }
+        if (ingData.status === 'success') allIngredientsList = ingData.ingredients || [];
+        if (ntData.status === 'success') { notTrackedItems = ntData.items || []; renderNotTrackedSection(); }
+    } catch(e) { console.error('Error loading items:', e); }
+    finally { hideLoader(); }
 }
 
 function populateCategories(selectId, categories) {
     const sel = document.getElementById(selectId);
-    categories.forEach(cat => {
-        const opt = document.createElement('option');
-        opt.value = cat;
-        opt.textContent = cat;
-        sel.appendChild(opt);
-    });
+    categories.forEach(cat => { const opt = document.createElement('option'); opt.value = cat; opt.textContent = cat; sel.appendChild(opt); });
 }
 
-// ─────────────────────────────────────────
+// ═════════════════════════════════════════
 // FORM SHOW / HIDE
-// ─────────────────────────────────────────
-function showPurchaseForm() {
-    document.getElementById('purchaseForm').classList.add('active');
-    document.getElementById('stockForm').classList.remove('active');
-    // Re-fetch saved data every time the form is opened so existing values are populated
-    const cat = document.getElementById('purchaseCategory').value;
-    if (cat) loadPurchaseGrid();
-}
-function showStockForm() {
-    document.getElementById('stockForm').classList.add('active');
-    document.getElementById('purchaseForm').classList.remove('active');
-    // Re-fetch saved data every time the form is opened so existing values are populated
-    const cat = document.getElementById('stockCategory').value;
-    if (cat) loadStockGrid();
-}
-function closeForm(id) {
-    document.getElementById(id).classList.remove('active');
-}
+// ═════════════════════════════════════════
+function showPurchaseForm() { document.getElementById('purchaseForm').classList.add('active'); document.getElementById('stockForm').classList.remove('active'); document.getElementById('reportForm').classList.remove('active'); const cat = document.getElementById('purchaseCategory').value; if (cat) loadPurchaseGrid(); }
+function showStockForm() { document.getElementById('stockForm').classList.add('active'); document.getElementById('purchaseForm').classList.remove('active'); document.getElementById('reportForm').classList.remove('active'); const cat = document.getElementById('stockCategory').value; if (cat) loadStockGrid(); }
+function closeForm(id) { document.getElementById(id).classList.remove('active'); }
 
-// ─────────────────────────────────────────
+// ═════════════════════════════════════════
 // PURCHASE GRID
-// ─────────────────────────────────────────
+// ═════════════════════════════════════════
 async function loadPurchaseGrid() {
     const cat = document.getElementById('purchaseCategory').value;
     if (!cat) { document.getElementById('purchaseGridWrapper').style.display = 'none'; return; }
-
     purchaseData = purchaseItems[cat] || [];
-    purchasePage = 1;
-    purchaseEntries = {};
-    purchaseExisting = {};
-
+    purchasePage = 1; purchaseEntries = {}; purchaseExisting = {};
     document.getElementById('purchaseCatLabel').textContent = '📂 ' + cat;
     document.getElementById('purchaseTotalItems').textContent = purchaseData.length;
     document.getElementById('purchaseGridWrapper').style.display = 'block';
-
-    // Fetch existing today's entries for this category
     showLoader('Checking today\'s entries...');
     try {
         const res = await fetch(API_URL + '?action=getCategoryPurchase&category=' + encodeURIComponent(cat));
         const result = await res.json();
-        if (result.status === 'success' && result.items) {
-            purchaseExisting = result.items; // { itemName: {currentQty, purchaseQty, unitPrice} }
-        }
-    } catch (e) { console.warn('Could not load existing entries', e); }
+        if (result.status === 'success' && result.items) purchaseExisting = result.items;
+    } catch(e) { console.warn('Could not load existing entries', e); }
     finally { hideLoader(); }
-
     renderPurchasePage();
 }
 
 function renderPurchasePage() {
     const tbody = document.getElementById('purchaseGridBody');
     tbody.innerHTML = '';
-
     const total = purchaseData.length;
     const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
     const start = (purchasePage - 1) * ITEMS_PER_PAGE;
     const end = Math.min(start + ITEMS_PER_PAGE, total);
-    const pageItems = purchaseData.slice(start, end);
-
-    document.getElementById('purchasePageRange').textContent = `${start + 1}–${end}`;
-
-    pageItems.forEach((item, idx) => {
+    document.getElementById('purchasePageRange').textContent = `${start+1}–${end}`;
+    purchaseData.slice(start, end).forEach((item, idx) => {
         const globalIdx = start + idx;
         const existing = purchaseExisting[item.name];
         const entry = purchaseEntries[item.name] || {};
-
+        const cQty = entry.currentQty !== undefined ? entry.currentQty : (existing ? existing.currentQty : '');
+        const pQty = entry.purchaseQty !== undefined ? entry.purchaseQty : (existing ? existing.purchaseQty : '');
+        const uPrc = entry.unitPrice !== undefined ? entry.unitPrice : (existing ? existing.unitPrice : '');
         const tr = document.createElement('tr');
-        tr.dataset.itemName = item.name;
-        tr.dataset.unit = item.unit;
-
-        // Pre-fill from existing today or from user input
-        const cQty  = entry.currentQty  !== undefined ? entry.currentQty  : (existing ? existing.currentQty  : '');
-        const pQty  = entry.purchaseQty !== undefined ? entry.purchaseQty : (existing ? existing.purchaseQty : '');
-        const uPrc  = entry.unitPrice   !== undefined ? entry.unitPrice   : (existing ? existing.unitPrice   : '');
-
+        tr.dataset.itemName = item.name; tr.dataset.unit = item.unit;
         tr.innerHTML = `
-            <td style="color:#aaa;font-size:13px;text-align:center;">${globalIdx + 1}</td>
-            <td>
-                <div class="item-name-cell">${item.name}</div>
-                <div><span class="unit-badge">${item.unit}</span></div>
-            </td>
-            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00"
-                    value="${cQty}"
-                    data-field="currentQty" data-item="${item.name}"
-                    oninput="onPurchaseInput(this)" onchange="onPurchaseInput(this)"></td>
-            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00"
-                    value="${pQty}"
-                    data-field="purchaseQty" data-item="${item.name}"
-                    oninput="onPurchaseInput(this)" onchange="onPurchaseInput(this)"></td>
-            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00"
-                    value="${uPrc}"
-                    data-field="unitPrice" data-item="${item.name}"
-                    oninput="onPurchaseInput(this)" onchange="onPurchaseInput(this)"></td>
+            <td style="color:#aaa;font-size:13px;text-align:center;">${globalIdx+1}</td>
+            <td><div class="item-name-cell">${item.name}</div><div><span class="unit-badge">${item.unit}</span></div></td>
+            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00" value="${cQty}" data-field="currentQty" data-item="${item.name}" oninput="onPurchaseInput(this)"></td>
+            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00" value="${pQty}" data-field="purchaseQty" data-item="${item.name}" oninput="onPurchaseInput(this)"></td>
+            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00" value="${uPrc}" data-field="unitPrice" data-item="${item.name}" oninput="onPurchaseInput(this)"></td>
             <td><span class="row-status" id="ps-${item.name.replace(/[^a-zA-Z0-9]/g,'_')}">—</span></td>
         `;
         tbody.appendChild(tr);
-
-        // Set initial styling
         updatePurchaseRowStatus(item.name);
         styleInputs(tr);
     });
-
     renderPurchasePagination(totalPages);
     updatePurchaseSummary();
 }
 
 function onPurchaseInput(input) {
     const itemName = input.dataset.item;
-    const field = input.dataset.field;
-    const val = input.value;
-
     if (!purchaseEntries[itemName]) purchaseEntries[itemName] = {};
-    purchaseEntries[itemName][field] = val;
-
+    purchaseEntries[itemName][input.dataset.field] = input.value;
     styleInputs(input.closest('tr'));
     updatePurchaseRowStatus(itemName);
     updatePurchaseSummary();
@@ -812,439 +609,610 @@ function onPurchaseInput(input) {
 function updatePurchaseRowStatus(itemName) {
     const entry = purchaseEntries[itemName] || {};
     const existing = purchaseExisting[itemName];
-    const safeId = itemName.replace(/[^a-zA-Z0-9]/g,'_');
-    const el = document.getElementById('ps-' + safeId);
+    const el = document.getElementById('ps-' + itemName.replace(/[^a-zA-Z0-9]/g,'_'));
     if (!el) return;
-
-    const hasCurrentQty  = entry.currentQty  !== '' && entry.currentQty  !== undefined;
-    const hasPurchaseQty = entry.purchaseQty !== '' && entry.purchaseQty !== undefined;
-    const hasUnitPrice   = entry.unitPrice   !== '' && entry.unitPrice   !== undefined;
-
-    const filledCount = [hasCurrentQty, hasPurchaseQty, hasUnitPrice].filter(Boolean).length;
-
-    if (filledCount === 0) {
-        if (existing) {
-            el.textContent = '📝 Existing'; el.className = 'row-status existing';
-        } else {
-            el.textContent = '—'; el.className = 'row-status empty';
-        }
-    } else if (filledCount < 3) {
-        el.textContent = '⚠ Partial'; el.className = 'row-status partial';
-    } else {
-        el.textContent = existing ? '✏ Update' : '✅ Ready'; el.className = 'row-status ready';
-    }
+    const filled = [entry.currentQty, entry.purchaseQty, entry.unitPrice].filter(v => v !== '' && v !== undefined).length;
+    if (filled === 0) { el.textContent = existing ? '📝 Existing' : '—'; el.className = 'row-status ' + (existing ? 'existing' : 'empty'); }
+    else if (filled < 3) { el.textContent = '⚠ Partial'; el.className = 'row-status partial'; }
+    else { el.textContent = existing ? '✏ Update' : '✅ Ready'; el.className = 'row-status ready'; }
 }
 
 function updatePurchaseSummary() {
-    let filled = 0, newEntries = 0, updates = 0;
+    let filled = 0, newE = 0, upd = 0;
     Object.keys(purchaseEntries).forEach(name => {
         const e = purchaseEntries[name];
-        if (e.currentQty !== '' && e.currentQty !== undefined &&
-            e.purchaseQty !== '' && e.purchaseQty !== undefined &&
-            e.unitPrice !== '' && e.unitPrice !== undefined) {
-            filled++;
-            if (purchaseExisting[name]) updates++;
-            else newEntries++;
-        }
+        if (e.currentQty !== '' && e.currentQty !== undefined && e.purchaseQty !== '' && e.purchaseQty !== undefined && e.unitPrice !== '' && e.unitPrice !== undefined) { filled++; if (purchaseExisting[name]) upd++; else newE++; }
     });
     document.getElementById('purchaseFilledCount').textContent = filled;
     document.getElementById('purchaseSubmitCount').textContent = filled;
-    document.getElementById('purchaseNewCount').textContent = newEntries;
-    document.getElementById('purchaseUpdateCount').textContent = updates;
+    document.getElementById('purchaseNewCount').textContent = newE;
+    document.getElementById('purchaseUpdateCount').textContent = upd;
 }
 
 function renderPurchasePagination(totalPages) {
     const pg = document.getElementById('purchasePagination');
     pg.innerHTML = '';
     if (totalPages <= 1) return;
-
-    const prev = document.createElement('button');
-    prev.className = 'page-btn';
-    prev.textContent = '← Prev';
-    prev.disabled = purchasePage === 1;
-    prev.onclick = () => { savePurchasePageInputs(); purchasePage--; renderPurchasePage(); };
-    pg.appendChild(prev);
-
-    for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement('button');
-        btn.className = 'page-btn' + (i === purchasePage ? ' active' : '');
-        btn.textContent = i;
-        btn.onclick = ((page) => () => { savePurchasePageInputs(); purchasePage = page; renderPurchasePage(); })(i);
-        pg.appendChild(btn);
-    }
-
-    const next = document.createElement('button');
-    next.className = 'page-btn';
-    next.textContent = 'Next →';
-    next.disabled = purchasePage === totalPages;
-    next.onclick = () => { savePurchasePageInputs(); purchasePage++; renderPurchasePage(); };
-    pg.appendChild(next);
-
-    const info = document.createElement('span');
-    info.className = 'page-info';
-    info.textContent = `Page ${purchasePage} of ${totalPages}`;
-    pg.appendChild(info);
+    const prev = document.createElement('button'); prev.className = 'page-btn'; prev.textContent = '← Prev'; prev.disabled = purchasePage===1; prev.onclick = () => { savePurchasePageInputs(); purchasePage--; renderPurchasePage(); }; pg.appendChild(prev);
+    for (let i = 1; i <= totalPages; i++) { const btn = document.createElement('button'); btn.className = 'page-btn'+(i===purchasePage?' active':''); btn.textContent = i; btn.onclick = ((p)=>()=>{ savePurchasePageInputs(); purchasePage=p; renderPurchasePage(); })(i); pg.appendChild(btn); }
+    const next = document.createElement('button'); next.className = 'page-btn'; next.textContent = 'Next →'; next.disabled = purchasePage===totalPages; next.onclick = () => { savePurchasePageInputs(); purchasePage++; renderPurchasePage(); }; pg.appendChild(next);
+    const info = document.createElement('span'); info.className = 'page-info'; info.textContent = `Page ${purchasePage} of ${totalPages}`; pg.appendChild(info);
 }
 
 function savePurchasePageInputs() {
-    // Values are saved live via oninput — this is a safety flush
     document.querySelectorAll('#purchaseGridBody tr').forEach(tr => {
-        const itemName = tr.dataset.itemName;
-        if (!itemName) return;
+        const itemName = tr.dataset.itemName; if (!itemName) return;
         if (!purchaseEntries[itemName]) purchaseEntries[itemName] = {};
-        tr.querySelectorAll('.grid-input').forEach(inp => {
-            purchaseEntries[itemName][inp.dataset.field] = inp.value;
-        });
+        tr.querySelectorAll('.grid-input').forEach(inp => { purchaseEntries[itemName][inp.dataset.field] = inp.value; });
     });
 }
 
-function clearPurchaseGrid() {
-    purchaseEntries = {};
-    renderPurchasePage();
-}
+function clearPurchaseGrid() { purchaseEntries = {}; renderPurchasePage(); }
 
 async function submitPurchaseBatch() {
     savePurchasePageInputs();
-
     const cat = document.getElementById('purchaseCategory').value;
-    const category = cat;
-
-    // Collect fully filled rows
     const batch = [];
     purchaseData.forEach(item => {
         const e = purchaseEntries[item.name] || {};
-        if (e.currentQty !== '' && e.currentQty !== undefined &&
-            e.purchaseQty !== '' && e.purchaseQty !== undefined &&
-            e.unitPrice !== '' && e.unitPrice !== undefined) {
-            batch.push({
-                category,
-                itemName: item.name,
-                unit: item.unit,
-                currentQty: e.currentQty,
-                purchaseQty: e.purchaseQty,
-                unitPrice: e.unitPrice,
-                isUpdate: !!purchaseExisting[item.name]
-            });
-        }
+        if (e.currentQty !== '' && e.currentQty !== undefined && e.purchaseQty !== '' && e.purchaseQty !== undefined && e.unitPrice !== '' && e.unitPrice !== undefined)
+            batch.push({ category:cat, itemName:item.name, unit:item.unit, currentQty:e.currentQty, purchaseQty:e.purchaseQty, unitPrice:e.unitPrice });
     });
-
-    if (batch.length === 0) {
-        showToast('No Data Entered', 'Please fill at least one complete row before submitting', 'warning');
-        return;
-    }
-
-    // Check for partial rows and warn
+    if (batch.length === 0) { showToast('No Data', 'Please fill at least one complete row', 'warning'); return; }
     let partials = 0;
-    purchaseData.forEach(item => {
-        const e = purchaseEntries[item.name] || {};
-        const vals = [e.currentQty, e.purchaseQty, e.unitPrice].filter(v => v !== '' && v !== undefined);
-        if (vals.length > 0 && vals.length < 3) partials++;
-    });
-    if (partials > 0) {
-        if (!confirm(`${partials} row(s) are partially filled and will be skipped. Continue submitting ${batch.length} complete row(s)?`)) return;
-    }
-
+    purchaseData.forEach(item => { const e = purchaseEntries[item.name]||{}; const vals = [e.currentQty,e.purchaseQty,e.unitPrice].filter(v=>v!==''&&v!==undefined); if (vals.length>0&&vals.length<3) partials++; });
+    if (partials > 0 && !confirm(`${partials} partial row(s) will be skipped. Submit ${batch.length} complete row(s)?`)) return;
     const btn = document.getElementById('purchaseSubmitBtn');
-    btn.disabled = true;
-    btn.textContent = `⏳ Submitting ${batch.length} items...`;
+    btn.disabled = true; btn.textContent = `⏳ Submitting ${batch.length} items...`;
     showLoader(`Submitting ${batch.length} purchases...`);
-
     try {
-        const res = await fetch(API_URL + '?action=addPurchaseBatch', {
-            method: 'POST',
-            body: JSON.stringify({ action: 'addPurchaseBatch', items: batch })
-        });
+        const res = await fetch(API_URL+'?action=addPurchaseBatch', { method:'POST', body:JSON.stringify({action:'addPurchaseBatch', items:batch}) });
         const data = await res.json();
-
         if (data.status === 'success') {
-            const added = data.added || 0;
-            const updated = data.updated || 0;
-            showToast(
-                'Purchases Submitted!',
-                `${added} new entries added, ${updated} entries updated`,
-                'success',
-                5000
-            );
-            showStatus('purchaseStatus',
-                `✅ Success! ${added} new entries added, ${updated} entries updated.`, 'success');
+            showToast('Purchases Submitted!', `${data.added} added, ${data.updated} updated`, 'success', 5000);
+            showStatus('purchaseStatus', `✅ ${data.added} added, ${data.updated} updated.`, 'success');
             purchaseEntries = {};
-            // Reload existing to reflect new state
-            const res2 = await fetch(API_URL + '?action=getCategoryPurchase&category=' + encodeURIComponent(cat));
-            const r2 = await res2.json();
-            if (r2.status === 'success') purchaseExisting = r2.items || {};
+            const res2 = await fetch(API_URL+'?action=getCategoryPurchase&category='+encodeURIComponent(cat));
+            const r2 = await res2.json(); if (r2.status==='success') purchaseExisting = r2.items||{};
             renderPurchasePage();
-        } else {
-            showToast('Submission Failed', data.message || 'Failed to submit purchases', 'error');
-            showStatus('purchaseStatus', '❌ Error: ' + data.message, 'error');
-        }
-    } catch (e) {
-        showToast('Connection Error', e.message || 'Failed to connect to server', 'error');
-        showStatus('purchaseStatus', '❌ Error: ' + e.message, 'error');
-    } finally {
-        hideLoader();
-        btn.disabled = false;
-        btn.textContent = '✅ Submit All Purchases';
-    }
+        } else { showToast('Failed', data.message, 'error'); showStatus('purchaseStatus', '❌ '+data.message, 'error'); }
+    } catch(e) { showToast('Error', e.message, 'error'); showStatus('purchaseStatus', '❌ '+e.message, 'error'); }
+    finally { hideLoader(); btn.disabled=false; btn.textContent='✅ Submit All Purchases'; }
 }
 
-// ─────────────────────────────────────────
+// ═════════════════════════════════════════
 // STOCK GRID
-// ─────────────────────────────────────────
+// ═════════════════════════════════════════
 async function loadStockGrid() {
     const cat = document.getElementById('stockCategory').value;
-    if (!cat) { document.getElementById('stockGridWrapper').style.display = 'none'; return; }
-
-    stockData = stockItems[cat] || [];
-    stockPage = 1;
-    stockEntries = {};
-    stockExisting = {};
-
-    document.getElementById('stockCatLabel').textContent = '📂 ' + cat;
+    if (!cat) { document.getElementById('stockGridWrapper').style.display='none'; return; }
+    stockData = stockItems[cat]||[]; stockPage=1; stockEntries={}; stockExisting={};
+    document.getElementById('stockCatLabel').textContent = '📂 '+cat;
     document.getElementById('stockTotalItems').textContent = stockData.length;
     document.getElementById('stockGridWrapper').style.display = 'block';
-
-    showLoader('Checking today\'s stock entries...');
+    showLoader('Checking today\'s stock...');
     try {
-        const res = await fetch(API_URL + '?action=getCategoryStock&category=' + encodeURIComponent(cat));
+        const res = await fetch(API_URL+'?action=getCategoryStock&category='+encodeURIComponent(cat));
         const result = await res.json();
-        if (result.status === 'success' && result.items) {
-            stockExisting = result.items; // { itemName: quantity }
-        }
-    } catch (e) { console.warn('Could not load existing stock', e); }
+        if (result.status==='success'&&result.items) stockExisting = result.items;
+    } catch(e) { console.warn(e); }
     finally { hideLoader(); }
-
     renderStockPage();
 }
 
 function renderStockPage() {
-    const tbody = document.getElementById('stockGridBody');
-    tbody.innerHTML = '';
-
-    const total = stockData.length;
-    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
-    const start = (stockPage - 1) * ITEMS_PER_PAGE;
-    const end = Math.min(start + ITEMS_PER_PAGE, total);
-    const pageItems = stockData.slice(start, end);
-
-    document.getElementById('stockPageRange').textContent = `${start + 1}–${end}`;
-
-    pageItems.forEach((item, idx) => {
-        const globalIdx = start + idx;
-        const existing = stockExisting[item.name];
-        const entry = stockEntries[item.name] || {};
-
-        const qty = entry.quantity !== undefined ? entry.quantity : (existing !== undefined ? existing : '');
-
-        const tr = document.createElement('tr');
-        tr.dataset.itemName = item.name;
-        tr.dataset.unit = item.unit;
-
-        tr.innerHTML = `
-            <td style="color:#aaa;font-size:13px;text-align:center;">${globalIdx + 1}</td>
-            <td>
-                <div class="item-name-cell">${item.name}</div>
-                <div><span class="unit-badge">${item.unit}</span></div>
-            </td>
-            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00"
-                    value="${qty}"
-                    data-field="quantity" data-item="${item.name}"
-                    oninput="onStockInput(this)" onchange="onStockInput(this)"></td>
+    const tbody = document.getElementById('stockGridBody'); tbody.innerHTML='';
+    const total=stockData.length, totalPages=Math.ceil(total/ITEMS_PER_PAGE);
+    const start=(stockPage-1)*ITEMS_PER_PAGE, end=Math.min(start+ITEMS_PER_PAGE,total);
+    document.getElementById('stockPageRange').textContent = `${start+1}–${end}`;
+    stockData.slice(start,end).forEach((item,idx)=>{
+        const globalIdx=start+idx, existing=stockExisting[item.name], entry=stockEntries[item.name]||{};
+        const qty = entry.quantity!==undefined ? entry.quantity : (existing!==undefined ? existing : '');
+        const tr=document.createElement('tr'); tr.dataset.itemName=item.name; tr.dataset.unit=item.unit;
+        tr.innerHTML=`
+            <td style="color:#aaa;font-size:13px;text-align:center;">${globalIdx+1}</td>
+            <td><div class="item-name-cell">${item.name}</div><div><span class="unit-badge">${item.unit}</span></div></td>
+            <td><input class="grid-input" type="number" step="0.01" min="0" placeholder="0.00" value="${qty}" data-field="quantity" data-item="${item.name}" oninput="onStockInput(this)"></td>
             <td><span class="row-status" id="ss-${item.name.replace(/[^a-zA-Z0-9]/g,'_')}">—</span></td>
         `;
-        tbody.appendChild(tr);
-
-        updateStockRowStatus(item.name);
-        styleInputs(tr);
+        tbody.appendChild(tr); updateStockRowStatus(item.name); styleInputs(tr);
     });
-
-    renderStockPagination(totalPages);
-    updateStockSummary();
+    renderStockPagination(totalPages); updateStockSummary();
 }
 
 function onStockInput(input) {
-    const itemName = input.dataset.item;
-    const val = input.value;
-
-    if (!stockEntries[itemName]) stockEntries[itemName] = {};
-    stockEntries[itemName].quantity = val;
-
-    styleInputs(input.closest('tr'));
-    updateStockRowStatus(itemName);
-    updateStockSummary();
+    const itemName=input.dataset.item;
+    if (!stockEntries[itemName]) stockEntries[itemName]={};
+    stockEntries[itemName].quantity=input.value;
+    styleInputs(input.closest('tr')); updateStockRowStatus(itemName); updateStockSummary();
 }
 
 function updateStockRowStatus(itemName) {
-    const entry = stockEntries[itemName] || {};
-    const existing = stockExisting[itemName];
-    const safeId = itemName.replace(/[^a-zA-Z0-9]/g,'_');
-    const el = document.getElementById('ss-' + safeId);
-    if (!el) return;
-
-    const hasQty = entry.quantity !== '' && entry.quantity !== undefined;
-
-    if (!hasQty) {
-        if (existing !== undefined) {
-            el.textContent = '📝 Existing'; el.className = 'row-status existing';
-        } else {
-            el.textContent = '—'; el.className = 'row-status empty';
-        }
-    } else {
-        el.textContent = existing !== undefined ? '✏ Update' : '✅ Ready';
-        el.className = 'row-status ready';
-    }
+    const entry=stockEntries[itemName]||{}, existing=stockExisting[itemName];
+    const el=document.getElementById('ss-'+itemName.replace(/[^a-zA-Z0-9]/g,'_')); if(!el)return;
+    const hasQty=entry.quantity!==''&&entry.quantity!==undefined;
+    if(!hasQty){el.textContent=existing!==undefined?'📝 Existing':'—';el.className='row-status '+(existing!==undefined?'existing':'empty');}
+    else{el.textContent=existing!==undefined?'✏ Update':'✅ Ready';el.className='row-status ready';}
 }
 
 function updateStockSummary() {
-    let filled = 0, newEntries = 0, updates = 0;
-    Object.keys(stockEntries).forEach(name => {
-        const e = stockEntries[name];
-        if (e.quantity !== '' && e.quantity !== undefined) {
-            filled++;
-            if (stockExisting[name] !== undefined) updates++;
-            else newEntries++;
-        }
-    });
-    document.getElementById('stockFilledCount').textContent = filled;
-    document.getElementById('stockSubmitCount').textContent = filled;
-    document.getElementById('stockNewCount').textContent = newEntries;
-    document.getElementById('stockUpdateCount').textContent = updates;
+    let filled=0,newE=0,upd=0;
+    Object.keys(stockEntries).forEach(name=>{const e=stockEntries[name];if(e.quantity!==''&&e.quantity!==undefined){filled++;if(stockExisting[name]!==undefined)upd++;else newE++;}});
+    document.getElementById('stockFilledCount').textContent=filled;
+    document.getElementById('stockSubmitCount').textContent=filled;
+    document.getElementById('stockNewCount').textContent=newE;
+    document.getElementById('stockUpdateCount').textContent=upd;
 }
 
 function renderStockPagination(totalPages) {
-    const pg = document.getElementById('stockPagination');
-    pg.innerHTML = '';
-    if (totalPages <= 1) return;
-
-    const prev = document.createElement('button');
-    prev.className = 'page-btn';
-    prev.textContent = '← Prev';
-    prev.disabled = stockPage === 1;
-    prev.onclick = () => { saveStockPageInputs(); stockPage--; renderStockPage(); };
-    pg.appendChild(prev);
-
-    for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement('button');
-        btn.className = 'page-btn' + (i === stockPage ? ' active' : '');
-        btn.textContent = i;
-        btn.onclick = ((page) => () => { saveStockPageInputs(); stockPage = page; renderStockPage(); })(i);
-        pg.appendChild(btn);
-    }
-
-    const next = document.createElement('button');
-    next.className = 'page-btn';
-    next.textContent = 'Next →';
-    next.disabled = stockPage === totalPages;
-    next.onclick = () => { saveStockPageInputs(); stockPage++; renderStockPage(); };
-    pg.appendChild(next);
-
-    const info = document.createElement('span');
-    info.className = 'page-info';
-    info.textContent = `Page ${stockPage} of ${totalPages}`;
-    pg.appendChild(info);
+    const pg=document.getElementById('stockPagination'); pg.innerHTML=''; if(totalPages<=1)return;
+    const prev=document.createElement('button'); prev.className='page-btn'; prev.textContent='← Prev'; prev.disabled=stockPage===1; prev.onclick=()=>{saveStockPageInputs();stockPage--;renderStockPage();}; pg.appendChild(prev);
+    for(let i=1;i<=totalPages;i++){const btn=document.createElement('button');btn.className='page-btn'+(i===stockPage?' active':'');btn.textContent=i;btn.onclick=((p)=>()=>{saveStockPageInputs();stockPage=p;renderStockPage();})(i);pg.appendChild(btn);}
+    const next=document.createElement('button');next.className='page-btn';next.textContent='Next →';next.disabled=stockPage===totalPages;next.onclick=()=>{saveStockPageInputs();stockPage++;renderStockPage();};pg.appendChild(next);
+    const info=document.createElement('span');info.className='page-info';info.textContent=`Page ${stockPage} of ${totalPages}`;pg.appendChild(info);
 }
 
 function saveStockPageInputs() {
-    document.querySelectorAll('#stockGridBody tr').forEach(tr => {
-        const itemName = tr.dataset.itemName;
-        if (!itemName) return;
-        if (!stockEntries[itemName]) stockEntries[itemName] = {};
-        tr.querySelectorAll('.grid-input').forEach(inp => {
-            stockEntries[itemName][inp.dataset.field] = inp.value;
-        });
+    document.querySelectorAll('#stockGridBody tr').forEach(tr=>{
+        const itemName=tr.dataset.itemName; if(!itemName)return;
+        if(!stockEntries[itemName])stockEntries[itemName]={};
+        tr.querySelectorAll('.grid-input').forEach(inp=>{stockEntries[itemName][inp.dataset.field]=inp.value;});
     });
 }
 
-function clearStockGrid() {
-    stockEntries = {};
-    renderStockPage();
-}
+function clearStockGrid(){stockEntries={};renderStockPage();}
 
 async function submitStockBatch() {
     saveStockPageInputs();
+    const cat=document.getElementById('stockCategory').value;
+    const batch=[];
+    stockData.forEach(item=>{const e=stockEntries[item.name]||{};if(e.quantity!==''&&e.quantity!==undefined)batch.push({category:cat,itemName:item.name,unit:item.unit,quantity:e.quantity});});
+    if(batch.length===0){showToast('No Data','Fill at least one row','warning');return;}
+    const btn=document.getElementById('stockSubmitBtn');
+    btn.disabled=true; btn.textContent=`⏳ Submitting ${batch.length} items...`;
+    showLoader(`Submitting ${batch.length} stock updates...`);
+    try {
+        const res=await fetch(API_URL+'?action=updateStockBatch',{method:'POST',body:JSON.stringify({action:'updateStockBatch',items:batch})});
+        const data=await res.json();
+        if(data.status==='success'){
+            showToast('Stock Updated!',`${data.added} added, ${data.updated} updated`,'success',5000);
+            showStatus('stockStatus',`✅ ${data.added} added, ${data.updated} updated.`,'success');
+            stockEntries={};
+            const res2=await fetch(API_URL+'?action=getCategoryStock&category='+encodeURIComponent(cat));
+            const r2=await res2.json(); if(r2.status==='success') stockExisting=r2.items||{};
+            renderStockPage();
+        } else { showToast('Failed',data.message,'error'); showStatus('stockStatus','❌ '+data.message,'error'); }
+    } catch(e){showToast('Error',e.message,'error'); showStatus('stockStatus','❌ '+e.message,'error');}
+    finally{hideLoader();btn.disabled=false;btn.textContent='✅ Submit All Stock Updates';}
+}
 
-    const cat = document.getElementById('stockCategory').value;
+// ═════════════════════════════════════════
+// REPORT FUNCTIONS
+// ═════════════════════════════════════════
+function showReportForm() {
+    document.getElementById('reportForm').classList.add('active');
+    document.getElementById('purchaseForm').classList.remove('active');
+    document.getElementById('stockForm').classList.remove('active');
+    document.getElementById('reportResults').style.display = 'none';
+    document.getElementById('noRecipeAlert').style.display = 'none';
+    renderNotTrackedSection();
+}
 
-    const batch = [];
-    stockData.forEach(item => {
-        const e = stockEntries[item.name] || {};
-        if (e.quantity !== '' && e.quantity !== undefined) {
-            batch.push({
-                category: cat,
-                itemName: item.name,
-                unit: item.unit,
-                quantity: e.quantity,
-                isUpdate: stockExisting[item.name] !== undefined
-            });
-        }
+// ── Not-Tracked Section ──
+function renderNotTrackedSection() {
+    const section = document.getElementById('notTrackedSection');
+    const chipsDiv = document.getElementById('notTrackedChips');
+    if (!notTrackedItems || notTrackedItems.length === 0) { section.style.display = 'none'; return; }
+    section.style.display = 'block';
+    chipsDiv.innerHTML = '';
+    notTrackedItems.forEach(item => {
+        const chip = document.createElement('span');
+        chip.className = 'not-tracked-chip';
+        chip.innerHTML = `${item} <button title="Remove from not-tracked" onclick="removeFromNotTracked('${item.replace(/'/g,"\\'")}')">×</button>`;
+        chipsDiv.appendChild(chip);
     });
+}
 
-    if (batch.length === 0) {
-        showToast('No Data Entered', 'Please fill at least one row before submitting', 'warning');
+async function addToNotTracked(itemName) {
+    try {
+        showLoader('Marking as not tracked...');
+        const res = await fetch(API_URL + '?action=markNotTracked', {
+            method: 'POST',
+            body: JSON.stringify({ action: 'markNotTracked', itemName: itemName })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            if (!notTrackedItems.includes(itemName)) notTrackedItems.push(itemName);
+            renderNotTrackedSection();
+            showToast('Not Tracked', `"${itemName}" will be ignored in future reports`, 'info', 4000);
+            // Hide this item's alert row
+            const alertRow = document.getElementById('nr-' + sanitizeId(itemName));
+            if (alertRow) alertRow.remove();
+            checkNoRecipeAlertEmpty();
+        } else { showToast('Error', data.message, 'error'); }
+    } catch(e) { showToast('Error', e.message, 'error'); }
+    finally { hideLoader(); }
+}
+
+async function removeFromNotTracked(itemName) {
+    try {
+        const res = await fetch(API_URL + '?action=removeNotTracked', {
+            method: 'POST',
+            body: JSON.stringify({ action: 'removeNotTracked', itemName: itemName })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            notTrackedItems = notTrackedItems.filter(i => i !== itemName);
+            renderNotTrackedSection();
+            showToast('Removed', `"${itemName}" removed from not-tracked list`, 'success');
+        } else { showToast('Error', data.message, 'error'); }
+    } catch(e) { showToast('Error', e.message, 'error'); }
+}
+
+function checkNoRecipeAlertEmpty() {
+    const container = document.getElementById('noRecipeAlert');
+    const rows = container.querySelectorAll('.no-recipe-item-row');
+    if (rows.length === 0) container.style.display = 'none';
+}
+
+// ── Sales Upload ──
+async function uploadSalesData() {
+    const date = document.getElementById('reportDate').value;
+    const fileInput = document.getElementById('petpoojaFile');
+    const salesText = document.getElementById('salesDataInput').value.trim();
+    if (!date) { showToast('Date Required', 'Please select a date', 'warning'); return; }
+    let sales = [];
+    if (fileInput.files && fileInput.files[0]) {
+        showLoader('Reading Excel file...');
+        try { sales = await parseExcelFile(fileInput.files[0]); hideLoader(); if (!sales.length) { showToast('No Data', 'No data found in Excel', 'error'); return; } showToast('Excel Parsed!', `Found ${sales.length} items`, 'info', 3000); }
+        catch(e) { hideLoader(); showToast('Excel Error', e.message, 'error'); return; }
+    } else if (salesText) {
+        let errors = 0;
+        salesText.split('\n').forEach(line => {
+            line = line.trim(); if (!line) return;
+            const parts = line.split(',');
+            if (parts.length < 2) { errors++; return; }
+            const itemName = parts[0].trim();
+            const quantity = parseFloat(parts[1].trim());
+            if (itemName && !isNaN(quantity) && quantity > 0) sales.push({ itemName, quantity });
+            else errors++;
+        });
+        if (!sales.length) { showToast('Invalid Format', 'No valid sales data. Format: Item Name, Quantity', 'error'); return; }
+        if (errors > 0) showToast('Warning', `${errors} line(s) skipped`, 'warning');
+    } else { showToast('No Data', 'Upload Excel OR paste sales data', 'warning'); return; }
+
+    showLoader('Uploading sales data...');
+    try {
+        const res = await fetch(API_URL + '?action=uploadSalesData', { method: 'POST', body: JSON.stringify({ action: 'uploadSalesData', date, sales }) });
+        const data = await res.json();
+        if (data.status === 'success') {
+            showToast('Uploaded!', `${sales.length} items for ${date}`, 'success', 4000);
+            showStatus('reportStatus', '✅ ' + data.message, 'success');
+            fileInput.value = '';
+            document.getElementById('salesDataInput').value = '';
+        } else { showToast('Failed', data.message, 'error'); showStatus('reportStatus', '❌ ' + data.message, 'error'); }
+    } catch(e) { showToast('Error', e.message, 'error'); }
+    finally { hideLoader(); }
+}
+
+function parseExcelFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { range: 4, header: 1 });
+                if (jsonData.length < 2) { reject(new Error('No data in Excel')); return; }
+                const headers = jsonData[0];
+                let itemCol = -1, qtyCol = -1;
+                headers.forEach((h, i) => { if (h === 'Item') itemCol = i; if (h === 'Qty.') qtyCol = i; });
+                if (itemCol === -1 || qtyCol === -1) { reject(new Error('Cannot find Item or Qty. columns')); return; }
+                const itemTotals = {};
+                for (let i = 1; i < jsonData.length; i++) {
+                    const row = jsonData[i]; if (!row || !row[itemCol]) continue;
+                    const itemName = String(row[itemCol]).trim();
+                    const qty = parseFloat(row[qtyCol]) || 0;
+                    if (itemName && qty > 0) itemTotals[itemName] = (itemTotals[itemName] || 0) + qty;
+                }
+                resolve(Object.entries(itemTotals).map(([itemName, quantity]) => ({ itemName, quantity })));
+            } catch(err) { reject(new Error('Failed to parse Excel: ' + err.message)); }
+        };
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsArrayBuffer(file);
+    });
+}
+
+// ── Generate Report ──
+async function generateDailyReport() {
+    const date = document.getElementById('reportDate').value;
+    if (!date) { showToast('Date Required', 'Please select a date', 'warning'); return; }
+    currentReportDate = date;
+    showLoader('Generating report...');
+    try {
+        const res = await fetch(API_URL + '?action=generateDailyReport&date=' + date);
+        const data = await res.json();
+        if (data.status === 'success') {
+            // Update local not-tracked from server response
+            if (data.notTrackedItems) notTrackedItems = data.notTrackedItems;
+            renderNotTrackedSection();
+            displayReport(data.report, date);
+            displayNoRecipeAlert(data.noRecipeItems || []);
+            showToast('Report Generated!', 'Daily usage report ready', 'success');
+        } else { showToast('Failed', data.message, 'error'); showStatus('reportStatus', '❌ ' + data.message, 'error'); }
+    } catch(e) { showToast('Error', e.message, 'error'); showStatus('reportStatus', '❌ ' + e.message, 'error'); }
+    finally { hideLoader(); }
+}
+
+// ── No-Recipe Alert ──
+function displayNoRecipeAlert(noRecipeItems) {
+    const container = document.getElementById('noRecipeAlert');
+    if (!noRecipeItems || noRecipeItems.length === 0) { container.style.display = 'none'; return; }
+    container.style.display = 'block';
+    container.innerHTML = `
+        <div class="no-recipe-alert">
+            <div class="no-recipe-alert-header">
+                <span style="font-size:24px;">⚠️</span>
+                <h4>${noRecipeItems.length} item(s) sold have no recipe — ingredient usage cannot be calculated</h4>
+            </div>
+            <div id="noRecipeItemsList"></div>
+        </div>
+    `;
+    const list = document.getElementById('noRecipeItemsList');
+    noRecipeItems.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'no-recipe-item-row';
+        row.id = 'nr-' + sanitizeId(item.itemName);
+        row.innerHTML = `
+            <div class="no-recipe-item-name">📋 ${item.itemName}</div>
+            <div class="no-recipe-item-qty">Sold: <strong>${item.qty}</strong></div>
+            <div class="no-recipe-actions">
+                <button class="btn-add-recipe" onclick="openRecipeModal('${item.itemName.replace(/'/g,"\\'")}')">📝 Add Ingredients</button>
+                <button class="btn-not-tracked" onclick="addToNotTracked('${item.itemName.replace(/'/g,"\\'")}')">🚫 Not Tracked</button>
+            </div>
+        `;
+        list.appendChild(row);
+    });
+}
+
+// ── Display Report Table ──
+function displayReport(report, date) {
+    const tbody = document.getElementById('reportGridBody');
+    tbody.innerHTML = '';
+    document.getElementById('reportDateDisplay').textContent = date;
+    activeBreakdownPanels.clear();
+
+    if (!report || report.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:#999;">No data available. Ensure sales data and stock records exist.</td></tr>';
+        document.getElementById('reportResults').style.display = 'block';
         return;
     }
 
-    const btn = document.getElementById('stockSubmitBtn');
+    report.forEach(item => {
+        const tr = document.createElement('tr');
+        let statusColor = '#28a745', statusIcon = '🟢', discColor = '#999';
+        if (item.status === 'Over Used') { statusColor = '#dc3545'; statusIcon = '🔴'; discColor = '#dc3545'; }
+        else if (item.status === 'Under Used') { statusColor = '#ffc107'; statusIcon = '🟡'; discColor = '#e67e22'; }
+        if (Math.abs(item.discrepancy) > 0.1) tr.style.background = item.status === 'Over Used' ? '#fff5f5' : '#fffdf5';
+
+        const safeId = sanitizeId(item.ingredient);
+        tr.id = 'rpt-row-' + safeId;
+        tr.innerHTML = `
+            <td style="font-weight:700;font-size:15px;">${item.ingredient}</td>
+            <td style="text-align:center;">${item.expected.toFixed(2)}</td>
+            <td style="text-align:center;">${item.actual.toFixed(2)}</td>
+            <td style="text-align:center;color:${discColor};font-weight:700;">${item.discrepancy>0?'+':''}${item.discrepancy.toFixed(2)}</td>
+            <td style="text-align:center;color:${discColor};font-weight:700;">${item.percentVariance>0?'+':''}${item.percentVariance}%</td>
+            <td style="text-align:center;"><span style="background:${statusColor};color:white;padding:5px 12px;border-radius:15px;font-size:12px;font-weight:600;white-space:nowrap;">${statusIcon} ${item.status}</span></td>
+            <td style="text-align:center;">
+                <button class="btn-show-usage" onclick="toggleUsageBreakdown('${item.ingredient.replace(/'/g,"\\'")}', '${safeId}')" id="ubtn-${safeId}">
+                    🔍 Show Usage
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+
+        // Placeholder row for breakdown panel
+        const bpRow = document.createElement('tr');
+        bpRow.id = 'bp-row-' + safeId;
+        bpRow.style.display = 'none';
+        bpRow.innerHTML = `<td colspan="7" style="padding:0 20px 16px;"><div id="bp-${safeId}"></div></td>`;
+        tbody.appendChild(bpRow);
+    });
+
+    document.getElementById('reportResults').style.display = 'block';
+    document.getElementById('reportResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Toggle Usage Breakdown ──
+async function toggleUsageBreakdown(ingredient, safeId) {
+    const bpRow = document.getElementById('bp-row-' + safeId);
+    const btn = document.getElementById('ubtn-' + safeId);
+    const panel = document.getElementById('bp-' + safeId);
+
+    if (activeBreakdownPanels.has(safeId)) {
+        // Hide
+        bpRow.style.display = 'none';
+        btn.textContent = '🔍 Show Usage';
+        activeBreakdownPanels.delete(safeId);
+        return;
+    }
+
+    // Show
+    btn.textContent = '⏳ Loading...';
     btn.disabled = true;
-    btn.textContent = `⏳ Submitting ${batch.length} items...`;
-    showLoader(`Submitting ${batch.length} stock updates...`);
 
     try {
-        const res = await fetch(API_URL + '?action=updateStockBatch', {
-            method: 'POST',
-            body: JSON.stringify({ action: 'updateStockBatch', items: batch })
-        });
+        const res = await fetch(`${API_URL}?action=getItemUsageBreakdown&date=${currentReportDate}&ingredient=${encodeURIComponent(ingredient)}`);
         const data = await res.json();
 
         if (data.status === 'success') {
-            const added = data.added || 0;
-            const updated = data.updated || 0;
-            showToast(
-                'Stock Updates Submitted!',
-                `${added} new entries added, ${updated} entries updated`,
-                'success',
-                5000
-            );
-            showStatus('stockStatus',
-                `✅ Success! ${added} new entries added, ${updated} entries updated.`, 'success');
-            stockEntries = {};
-            const res2 = await fetch(API_URL + '?action=getCategoryStock&category=' + encodeURIComponent(cat));
-            const r2 = await res2.json();
-            if (r2.status === 'success') stockExisting = r2.items || {};
-            renderStockPage();
+            const breakdown = data.breakdown;
+            if (!breakdown || breakdown.length === 0) {
+                panel.innerHTML = `<div class="usage-breakdown-panel"><h4>📊 Usage Breakdown — ${ingredient}</h4><p style="color:#999;font-size:14px;">No dish-level data found. Verify recipe sheet has this ingredient mapped.</p></div>`;
+            } else {
+                const totalUsage = breakdown.reduce((s, b) => s + b.totalUsage, 0);
+                const rows = breakdown.map((b, i) =>
+                    `<tr style="background:${i%2===0?'white':'#f8f9fa'}">
+                        <td style="padding:8px 12px;font-weight:600;">${b.itemName}</td>
+                        <td style="padding:8px 12px;text-align:center;">${b.qty}</td>
+                        <td style="padding:8px 12px;text-align:center;">${b.usagePerItem.toFixed(3)} ${b.unit}/item</td>
+                        <td style="padding:8px 12px;text-align:center;font-weight:700;color:#b8342f;">${b.totalUsage.toFixed(3)} ${b.unit}</td>
+                    </tr>`
+                ).join('');
+
+                panel.innerHTML = `
+                    <div class="usage-breakdown-panel">
+                        <h4>📊 Dish-wise Usage — ${ingredient} &nbsp;<span style="font-size:13px;color:#555;font-weight:400;">(Expected total: ${totalUsage.toFixed(3)} KG)</span></h4>
+                        <div class="grid-table-wrap">
+                            <table style="min-width:400px;">
+                                <thead><tr>
+                                    <th style="width:40%;">Item Name</th>
+                                    <th style="width:15%;text-align:center;">Qty Sold</th>
+                                    <th style="width:25%;text-align:center;">Per Item Usage</th>
+                                    <th style="width:20%;text-align:center;">Total Usage</th>
+                                </tr></thead>
+                                <tbody>${rows}</tbody>
+                                <tfoot><tr style="background:#b8342f;color:white;">
+                                    <td colspan="3" style="padding:8px 12px;font-weight:700;">Total Expected Usage</td>
+                                    <td style="padding:8px 12px;text-align:center;font-weight:700;">${totalUsage.toFixed(3)} KG</td>
+                                </tr></tfoot>
+                            </table>
+                        </div>
+                    </div>`;
+            }
+            bpRow.style.display = 'table-row';
+            btn.textContent = '🔼 Hide Usage';
+            activeBreakdownPanels.add(safeId);
         } else {
-            showToast('Submission Failed', data.message || 'Failed to update stock', 'error');
-            showStatus('stockStatus', '❌ Error: ' + data.message, 'error');
+            showToast('Error', data.message, 'error');
+            btn.textContent = '🔍 Show Usage';
         }
-    } catch (e) {
-        showToast('Connection Error', e.message || 'Failed to connect to server', 'error');
-        showStatus('stockStatus', '❌ Error: ' + e.message, 'error');
+    } catch(e) {
+        showToast('Error', e.message, 'error');
+        btn.textContent = '🔍 Show Usage';
     } finally {
-        hideLoader();
         btn.disabled = false;
-        btn.textContent = '✅ Submit All Stock Updates';
     }
 }
 
-// ─────────────────────────────────────────
-// UTILS
-// ─────────────────────────────────────────
-function styleInputs(tr) {
-    tr.querySelectorAll('.grid-input').forEach(inp => {
-        inp.classList.toggle('filled', inp.value !== '');
-    });
+// ═════════════════════════════════════════
+// ADD RECIPE MODAL
+// ═════════════════════════════════════════
+function openRecipeModal(dishName) {
+    currentModalDish = dishName;
+    ingredientRowCount = 0;
+    document.getElementById('modalDishName').textContent = '🍽️ ' + dishName;
+    document.getElementById('ingredientRowsContainer').innerHTML = '';
+    document.getElementById('addRecipeModal').classList.add('active');
+    document.getElementById('modalSaveBtn').disabled = false;
+    // Add first row by default
+    addIngredientRow();
 }
 
-// Toast notification functions
+function closeRecipeModal() {
+    document.getElementById('addRecipeModal').classList.remove('active');
+    currentModalDish = '';
+}
+
+function addIngredientRow() {
+    ingredientRowCount++;
+    const rowId = 'ing-row-' + ingredientRowCount;
+    const container = document.getElementById('ingredientRowsContainer');
+    const row = document.createElement('div');
+    row.className = 'ingredient-row';
+    row.id = rowId;
+
+    // Build ingredient dropdown options
+    const options = allIngredientsList.map(ing => `<option value="${ing}">${ing}</option>`).join('');
+
+    row.innerHTML = `
+        <div class="ingredient-row-num">${ingredientRowCount}</div>
+        <div class="ingredient-row-fields">
+            <select data-role="ing-name">
+                <option value="">-- Select Ingredient --</option>
+                ${options}
+            </select>
+            <input type="number" step="0.001" min="0" placeholder="Qty" data-role="ing-qty">
+            <input type="text" placeholder="Unit" value="KG" data-role="ing-unit" style="text-transform:uppercase;">
+        </div>
+        ${ingredientRowCount > 1 ? `<button class="ingredient-row-remove" onclick="removeIngredientRow('${rowId}')" title="Remove">−</button>` : '<div style="width:32px;"></div>'}
+    `;
+    container.appendChild(row);
+}
+
+function removeIngredientRow(rowId) {
+    const row = document.getElementById(rowId);
+    if (row) row.remove();
+}
+
+async function saveRecipeIngredients() {
+    if (!currentModalDish) { showToast('Error', 'No dish selected', 'error'); return; }
+    const rows = document.querySelectorAll('#ingredientRowsContainer .ingredient-row');
+    const ingredients = [];
+
+    rows.forEach(row => {
+        const nameEl = row.querySelector('[data-role="ing-name"]');
+        const qtyEl = row.querySelector('[data-role="ing-qty"]');
+        const unitEl = row.querySelector('[data-role="ing-unit"]');
+        const name = nameEl ? nameEl.value.trim() : '';
+        const qty = qtyEl ? parseFloat(qtyEl.value) : 0;
+        const unit = unitEl ? unitEl.value.trim() || 'KG' : 'KG';
+        if (name && qty > 0) ingredients.push({ name, qty, unit });
+    });
+
+    if (ingredients.length === 0) {
+        showToast('No Ingredients', 'Please add at least one ingredient with a quantity', 'warning');
+        return;
+    }
+
+    const btn = document.getElementById('modalSaveBtn');
+    btn.disabled = true; btn.textContent = '⏳ Saving...';
+    showLoader('Saving recipe...');
+
+    try {
+        const res = await fetch(API_URL + '?action=addRecipeIngredients', {
+            method: 'POST',
+            body: JSON.stringify({ action: 'addRecipeIngredients', dishName: currentModalDish, ingredients })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            showToast('Recipe Saved!', data.message, 'success', 5000);
+            closeRecipeModal();
+            // Remove the item from no-recipe alert
+            const alertRow = document.getElementById('nr-' + sanitizeId(currentModalDish));
+            if (alertRow) alertRow.remove();
+            checkNoRecipeAlertEmpty();
+        } else { showToast('Failed', data.message, 'error'); }
+    } catch(e) { showToast('Error', e.message, 'error'); }
+    finally { hideLoader(); btn.disabled = false; btn.textContent = '💾 Save Recipe'; }
+}
+
+// Close modal on overlay click
+document.getElementById('addRecipeModal').addEventListener('click', function(e) {
+    if (e.target === this) closeRecipeModal();
+});
+
+// ═════════════════════════════════════════
+// UTILITIES
+// ═════════════════════════════════════════
+function sanitizeId(str) { return str.replace(/[^a-zA-Z0-9]/g, '_'); }
+
+function styleInputs(tr) {
+    tr.querySelectorAll('.grid-input').forEach(inp => { inp.classList.toggle('filled', inp.value !== ''); });
+}
+
 function showToast(title, message, type = 'info', duration = 4000) {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
     toast.innerHTML = `
-        <div class="toast-icon">${icons[type] || 'ℹ'}</div>
+        <div class="toast-icon">${icons[type]||'ℹ'}</div>
         <div class="toast-content">
             <div class="toast-title">${title}</div>
-            ${message ? `<div class="toast-message">${message}</div>` : ''}
+            ${message?`<div class="toast-message">${message}</div>`:''}
         </div>
         <button class="toast-close" onclick="closeToast(this)">×</button>
     `;
@@ -1255,7 +1223,7 @@ function showToast(title, message, type = 'info', duration = 4000) {
 function closeToast(button) {
     const toast = button.parentElement;
     toast.classList.add('hiding');
-    setTimeout(() => { toast.remove(); }, 300);
+    setTimeout(() => { if(toast.parentElement) toast.remove(); }, 300);
 }
 
 function showStatus(id, msg, type) {
@@ -1264,317 +1232,6 @@ function showStatus(id, msg, type) {
     el.className = `status-message ${type}`;
     setTimeout(() => { el.style.display = 'none'; }, 6000);
 }
-
-// ─────────────────────────────────────────
-// DAILY REPORT FUNCTIONS
-// ─────────────────────────────────────────
-function showReportForm() {
-    // Set max date to today
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('reportDate').max = today;
-    document.getElementById('reportDate').value = today;
-    
-    document.getElementById('reportForm').classList.add('active');
-    document.getElementById('purchaseForm').classList.remove('active');
-    document.getElementById('stockForm').classList.remove('active');
-    
-    // Hide results on form open
-    document.getElementById('reportResults').style.display = 'none';
-}
-
-async function uploadSalesData() {
-    const date = document.getElementById('reportDate').value;
-    const fileInput = document.getElementById('petpoojaFile');
-    const salesText = document.getElementById('salesDataInput').value.trim();
-    
-    if (!date) {
-        showToast('Date Required', 'Please select a date', 'warning');
-        return;
-    }
-    
-    let sales = [];
-    
-    // Check if Excel file is uploaded
-    if (fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        
-        showLoader('Reading Excel file...');
-        
-        try {
-            sales = await parseExcelFile(file);
-            hideLoader();
-            
-            if (sales.length === 0) {
-                showToast('No Data Found', 'Could not find sales data in Excel file', 'error');
-                return;
-            }
-            
-            showToast('Excel Parsed!', `Found ${sales.length} items in file`, 'info', 3000);
-        } catch (e) {
-            hideLoader();
-            showToast('Excel Parse Error', e.message, 'error');
-            return;
-        }
-    }
-    // Else check if manual data is pasted
-    else if (salesText) {
-        // Parse manual text data
-        const lines = salesText.split('\n');
-        let errors = 0;
-        
-        lines.forEach((line, index) => {
-            line = line.trim();
-            if (!line) return; // Skip empty lines
-            
-            // Split by comma
-            const parts = line.split(',');
-            if (parts.length < 2) {
-                errors++;
-                return;
-            }
-            
-            const itemName = parts[0].trim();
-            const quantity = parseFloat(parts[1].trim());
-            
-            if (itemName && !isNaN(quantity) && quantity > 0) {
-                sales.push({ itemName, quantity });
-            } else {
-                errors++;
-            }
-        });
-        
-        if (sales.length === 0) {
-            showToast('Invalid Format', 'No valid sales data found. Format: Item Name, Quantity', 'error');
-            return;
-        }
-        
-        if (errors > 0) {
-            showToast('Parsing Warning', `${errors} line(s) skipped due to format errors`, 'warning');
-        }
-    } else {
-        showToast('No Data', 'Please upload Excel file OR paste sales data', 'warning');
-        return;
-    }
-    
-    // Upload to server
-    showLoader('Uploading sales data...');
-    
-    try {
-        const response = await fetch(API_URL + '?action=uploadSalesData', {
-            method: 'POST',
-            body: JSON.stringify({
-                action: 'uploadSalesData',
-                date: date,
-                sales: sales
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.status === 'success') {
-            showToast(
-                'Sales Data Uploaded!',
-                `${sales.length} items uploaded for ${date}`,
-                'success',
-                4000
-            );
-            showStatus('reportStatus', `✅ ${data.message}`, 'success');
-            
-            // Clear inputs after successful upload
-            if (fileInput.files) {
-                fileInput.value = '';
-            }
-            document.getElementById('salesDataInput').value = '';
-        } else {
-            showToast('Upload Failed', data.message || 'Failed to upload sales data', 'error');
-            showStatus('reportStatus', '❌ Error: ' + data.message, 'error');
-        }
-    } catch (e) {
-        showToast('Connection Error', e.message, 'error');
-        showStatus('reportStatus', '❌ Error: ' + e.message, 'error');
-    } finally {
-        hideLoader();
-    }
-}
-
-// Parse Excel file using SheetJS
-function parseExcelFile(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            try {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                
-                // Get first sheet
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                
-                // Convert to JSON (skip first 4 rows, row 5 is headers)
-                const jsonData = XLSX.utils.sheet_to_json(worksheet, { 
-                    range: 4, // Start from row 5 (0-indexed, so 4)
-                    header: 1 // Use first row as headers
-                });
-                
-                if (jsonData.length < 2) {
-                    reject(new Error('No data found in Excel file'));
-                    return;
-                }
-                
-                // First row is headers, data starts from second row
-                const headers = jsonData[0];
-                
-                // Find Item and Qty columns
-                let itemCol = -1;
-                let qtyCol = -1;
-                
-                headers.forEach((header, index) => {
-                    if (header === 'Item') itemCol = index;
-                    if (header === 'Qty.') qtyCol = index;
-                });
-                
-                if (itemCol === -1 || qtyCol === -1) {
-                    reject(new Error('Could not find Item or Qty. columns in Excel file'));
-                    return;
-                }
-                
-                // Parse sales data
-                const sales = [];
-                const itemTotals = {}; // To sum up quantities for same items
-                
-                for (let i = 1; i < jsonData.length; i++) {
-                    const row = jsonData[i];
-                    if (!row || !row[itemCol]) continue;
-                    
-                    const itemName = String(row[itemCol]).trim();
-                    const quantity = parseFloat(row[qtyCol]) || 0;
-                    
-                    if (itemName && quantity > 0) {
-                        // Sum quantities for same item
-                        if (itemTotals[itemName]) {
-                            itemTotals[itemName] += quantity;
-                        } else {
-                            itemTotals[itemName] = quantity;
-                        }
-                    }
-                }
-                
-                // Convert to array
-                for (const itemName in itemTotals) {
-                    sales.push({
-                        itemName: itemName,
-                        quantity: itemTotals[itemName]
-                    });
-                }
-                
-                resolve(sales);
-            } catch (err) {
-                reject(new Error('Failed to parse Excel file: ' + err.message));
-            }
-        };
-        
-        reader.onerror = function() {
-            reject(new Error('Failed to read file'));
-        };
-        
-        reader.readAsArrayBuffer(file);
-    });
-}
-
-async function generateDailyReport() {
-    const date = document.getElementById('reportDate').value;
-    
-    if (!date) {
-        showToast('Date Required', 'Please select a date', 'warning');
-        return;
-    }
-    
-    showLoader('Generating report...');
-    
-    try {
-        const response = await fetch(API_URL + '?action=generateDailyReport&date=' + date);
-        const data = await response.json();
-        
-        if (data.status === 'success') {
-            displayReport(data.report, data.date);
-            showToast('Report Generated!', 'Daily usage report created successfully', 'success');
-        } else {
-            showToast('Report Failed', data.message || 'Failed to generate report', 'error');
-            showStatus('reportStatus', '❌ ' + data.message, 'error');
-        }
-    } catch (e) {
-        showToast('Connection Error', e.message, 'error');
-        showStatus('reportStatus', '❌ Error: ' + e.message, 'error');
-    } finally {
-        hideLoader();
-    }
-}
-
-function displayReport(report, date) {
-    const tbody = document.getElementById('reportGridBody');
-    tbody.innerHTML = '';
-    
-    document.getElementById('reportDateDisplay').textContent = date;
-    
-    if (!report || report.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 30px; color: #999;">No data available for this date. Make sure you have uploaded sales data and have stock records.</td></tr>';
-        document.getElementById('reportResults').style.display = 'block';
-        return;
-    }
-    
-    report.forEach((item, index) => {
-        const tr = document.createElement('tr');
-        
-        // Determine color and icon based on status
-        let statusColor = '#28a745'; // Green (Perfect)
-        let statusIcon = '🟢';
-        let discrepancyColor = '#999';
-        
-        if (item.status === 'Over Used') {
-            statusColor = '#dc3545'; // Red
-            statusIcon = '🔴';
-            discrepancyColor = '#dc3545';
-        } else if (item.status === 'Under Used') {
-            statusColor = '#ffc107'; // Yellow/Orange
-            statusIcon = '🟡';
-            discrepancyColor = '#e67e22';
-        }
-        
-        // Highlight rows with significant discrepancy
-        if (Math.abs(item.discrepancy) > 0.1) {
-            tr.style.background = item.status === 'Over Used' ? '#fff5f5' : '#fffdf5';
-        }
-        
-        tr.innerHTML = `
-            <td style="font-weight: 600; font-size: 15px;">${item.ingredient}</td>
-            <td style="text-align: center;">${item.expected.toFixed(2)}</td>
-            <td style="text-align: center;">${item.actual.toFixed(2)}</td>
-            <td style="text-align: center; color: ${discrepancyColor}; font-weight: 700;">
-                ${item.discrepancy > 0 ? '+' : ''}${item.discrepancy.toFixed(2)}
-            </td>
-            <td style="text-align: center; color: ${discrepancyColor}; font-weight: 700;">
-                ${item.percentVariance > 0 ? '+' : ''}${item.percentVariance}%
-            </td>
-            <td style="text-align: center;">
-                <span style="background: ${statusColor}; color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; white-space: nowrap;">
-                    ${statusIcon} ${item.status}
-                </span>
-            </td>
-        `;
-        
-        tbody.appendChild(tr);
-    });
-    
-    document.getElementById('reportResults').style.display = 'block';
-    
-    // Scroll to results
-    document.getElementById('reportResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
 </script>
-
-<!-- Toast Container -->
-<div class="toast-container" id="toastContainer"></div>
-
 </body>
 </html>
