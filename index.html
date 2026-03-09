@@ -1607,6 +1607,10 @@ function displayArchivedReportData(report, date, generatedAt) {
     tbody.innerHTML = '';
     document.getElementById('archivedReportDate').textContent = formatDate(date) + ' (Generated: ' + formatDateTime(generatedAt) + ')';
     
+    // Set currentReportDate so toggleUsageBreakdown works
+    currentReportDate = date;
+    activeBreakdownPanels.clear();
+    
     if (!report || report.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:#999;">No data in this report</td></tr>';
         document.getElementById('archivedReportViewer').style.display = 'block';
@@ -1614,12 +1618,14 @@ function displayArchivedReportData(report, date, generatedAt) {
     }
     
     report.forEach(item => {
+        const safeId = sanitizeId(item.ingredient);
         const tr = document.createElement('tr');
         let statusColor = '#28a745', statusIcon = '🟢', discColor = '#999';
         if (item.status === 'Over Used') { statusColor = '#dc3545'; statusIcon = '🔴'; discColor = '#dc3545'; }
         else if (item.status === 'Under Used') { statusColor = '#ffc107'; statusIcon = '🟡'; discColor = '#e67e22'; }
         if (Math.abs(item.discrepancy) > 0.1) tr.style.background = item.status === 'Over Used' ? '#fff5f5' : '#fffdf5';
         
+        tr.id = 'rpt-row-' + safeId;
         tr.innerHTML = `
             <td style="font-weight:700;font-size:15px;">${item.ingredient}</td>
             <td style="text-align:center;">${item.expected.toFixed(2)}</td>
@@ -1632,13 +1638,21 @@ function displayArchivedReportData(report, date, generatedAt) {
                 </span>
             </td>
             <td style="text-align:center;">
-                <button onclick="toggleUsageBreakdown('${item.ingredient}', '${sanitizeId(item.ingredient)}')" 
-                    style="background:#17a2b8;color:white;border:none;padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;">
+                <button class="btn-show-usage" 
+                    onclick="toggleUsageBreakdown('${item.ingredient.replace(/'/g,"\\'")}', '${safeId}')"
+                    id="ubtn-${safeId}">
                     🔍 Show Usage
                 </button>
             </td>
         `;
         tbody.appendChild(tr);
+
+        // Add breakdown panel row — same as live report
+        const bpRow = document.createElement('tr');
+        bpRow.id = 'bp-row-' + safeId;
+        bpRow.style.display = 'none';
+        bpRow.innerHTML = `<td colspan="7" style="padding:0 20px 16px;"><div id="bp-${safeId}"></div></td>`;
+        tbody.appendChild(bpRow);
     });
     
     document.getElementById('archivedReportViewer').style.display = 'block';
