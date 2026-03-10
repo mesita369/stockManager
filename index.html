@@ -44,8 +44,16 @@
         .grid-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .grid-info-text { font-size: 14px; color: #555; font-weight: 500; }
         .grid-info-text span { color: #b8342f; font-weight: 700; }
-        .grid-table-wrap { overflow-x: auto; border-radius: 12px; border: 2px solid #e0e0e0; }
+        .grid-table-wrap { overflow-x: auto; border-radius: 12px; border: 2px solid #e0e0e0; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        
+        /* Mobile-friendly table */
+        @media (max-width: 768px) {
+            table { min-width: 100%; font-size: 13px; }
+            thead th { padding: 10px 6px; font-size: 11px; }
+            tbody td { padding: 6px 4px; font-size: 12px; }
+            .grid-input { padding: 6px 8px; font-size: 13px; }
+        }
         thead tr { background: #b8342f; }
         thead th { padding: 14px 12px; color: white; font-weight: 600; font-size: 13px; text-align: left; white-space: nowrap; }
         thead th:first-child { border-radius: 10px 0 0 0; }
@@ -237,6 +245,35 @@
             .modal-box { padding: 20px; }
             .date-display { font-size: 16px; }
             .wastage-grid { grid-template-columns: 1fr; }
+             /* NEW: Better mobile table scrolling */
+            .grid-table-wrap { 
+                margin: 0 -10px; 
+                padding: 0 10px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* NEW: Mobile-friendly buttons */
+            .btn-show-usage, .btn-add-recipe, .btn-not-tracked {
+                font-size: 11px !important;
+                padding: 6px 10px !important;
+            }
+            
+            /* NEW: Adjust summary items on mobile */
+            .submit-summary {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            /* NEW: Better modal on mobile */
+            .modal-overlay {
+                padding: 10px;
+            }
+            
+            .modal-box {
+                max-width: 100%;
+                max-height: 95vh;
+            }
         }
         @media (max-width: 480px) {
             .header h1 { font-size: 26px; }
@@ -1561,27 +1598,42 @@ function displayReportHistoryGrid(reports) {
     
     const grid = document.getElementById('reportHistoryGrid');
     grid.style.display = 'block';
-    let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;">';
+    
+    // Create table instead of cards
+    let html = `
+        <div class="grid-table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:25%;">Date</th>
+                        <th style="width:30%;">Generated At</th>
+                        <th style="width:30%;">Summary</th>
+                        <th style="width:15%;text-align:center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>`;
     
     reports.forEach(r => {
         html += `
-            <div style="background:white;border:2px solid #e0e0e0;border-radius:12px;padding:20px;cursor:pointer;"
-                 onmouseover="this.style.borderColor='#b8342f'" onmouseout="this.style.borderColor='#e0e0e0'">
-                <div style="display:flex;gap:12px;margin-bottom:15px;border-bottom:2px solid #f0f0f0;padding-bottom:15px;">
-                    <div style="font-size:32px;">📊</div>
-                    <div style="flex:1;">
-                        <div style="font-size:20px;font-weight:700;color:#b8342f;">${formatDate(r.date)}</div>
-                        <div style="font-size:12px;color:#999;margin-top:4px;">Generated: ${formatDateTime(r.generatedAt)}</div>
-                    </div>
-                </div>
-                <div style="color:#666;font-size:14px;margin-bottom:15px;">${r.summary}</div>
-                <button onclick="viewArchivedReport('${r.date}')" 
-                    style="background:#17a2b8;color:white;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;width:100%;">
-                    👁️ View Report
-                </button>
-            </div>`;
+            <tr style="border-bottom:1px solid #eee;">
+                <td style="font-weight:700;color:#b8342f;font-size:15px;">${formatDate(r.date)}</td>
+                <td style="color:#666;font-size:13px;">${formatDateTime(r.generatedAt)}</td>
+                <td style="color:#555;font-size:13px;">${r.summary}</td>
+                <td style="text-align:center;">
+                    <button onclick="viewArchivedReport('${r.date}')" 
+                        class="btn-show-usage"
+                        style="background:#17a2b8;border-color:#17a2b8;padding:8px 16px;font-size:13px;white-space:nowrap;">
+                        👁️ View
+                    </button>
+                </td>
+            </tr>`;
     });
-    html += '</div>';
+    
+    html += `
+                </tbody>
+            </table>
+        </div>`;
+    
     grid.innerHTML = html;
 }
 
